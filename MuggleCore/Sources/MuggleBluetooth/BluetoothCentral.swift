@@ -99,11 +99,12 @@ extension BluetoothCentral: CBCentralManagerDelegate {
   ) {
     if peripherals.keys.contains(peripheral.identifier) { return }
     let name = peripheral.name ?? "unknown"
+    let manufacturerData = advertisementData.manufacturerData?.bytes ?? []
     guard advertisementData.advertisedServices.contains(.ember.service) else {
-      Log.central.error("didDiscover non-Ember product \(name) \(peripheral.identifier)")
+      Log.central.error("didDiscover non-Ember product \(name) \(peripheral.identifier) \(manufacturerData)")
       return
     }
-    Log.central.info("didDiscover \(name) \(peripheral.identifier)")
+    Log.central.info("didDiscover \(name) \(peripheral.identifier) \(manufacturerData)")
     let mug = registerEmber(peripheral, previouslyConnected: nil)
     connect(mug)
   }
@@ -232,5 +233,9 @@ private extension [String : Any] {
   var advertisedServices: Set<CBUUID> {
     let services = self[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID]
     return Set(services ?? [])
+  }
+
+  var manufacturerData: Data? {
+    self[CBAdvertisementDataManufacturerDataKey] as? Data
   }
 }
