@@ -1,9 +1,9 @@
 import MuggleBluetooth
 import SwiftUI
-#if os(macOS)
-public struct MacRootScene: Scene {
+#if os(visionOS)
+    public struct VisionOSRootScene: Scene {
 
-  public init(delegate: MacAppDelegate) {
+  public init(delegate: VisionOSAppDelegate) {
     self.central = delegate.central
   }
 
@@ -14,8 +14,9 @@ public struct MacRootScene: Scene {
   private let central: BluetoothCentral
 
   public var body: some Scene {
-    MenuBarExtraScene(central: central)
-    SettingsWindow()
+    WindowGroup {
+      MenuBarWindow(central: central)
+    }
   }
 }
 #endif

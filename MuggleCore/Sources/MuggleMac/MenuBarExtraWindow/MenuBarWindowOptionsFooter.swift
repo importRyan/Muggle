@@ -7,6 +7,7 @@ struct MenuBarWindowOptionsFooter: View {
 
   var body: some View {
     HStack(spacing: 30) {
+      #if os(macOS)
       Button("Quit") {
         NSApp.terminate(nil)
       }
@@ -24,6 +25,7 @@ struct MenuBarWindowOptionsFooter: View {
         }
         openWindow(id: SettingsWindow.id)
       }
+      #endif
     }
     .font(.callout)
     .foregroundStyle(isHovering ? .primary : .tertiary)
@@ -37,8 +39,10 @@ struct MenuBarWindowOptionsFooter: View {
   }
 }
 
+#if os(macOS)
 extension [NSWindow] {
   var settingsWindow: NSWindow? {
     filter { $0.identifier?.rawValue == SettingsWindow.id }.first
   }
 }
+#endif

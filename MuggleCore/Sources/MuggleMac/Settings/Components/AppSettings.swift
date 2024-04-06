@@ -1,9 +1,12 @@
 import SwiftUI
 
 struct AppSettings: View {
+#if os(macOS)
   @StateObject var launchAtLogin = LaunchAtLoginViewModel()
-
+#endif
+  
   var body: some View {
+#if os(macOS)
     VStack {
       Toggle(
         "Start on boot",
@@ -18,5 +21,6 @@ struct AppSettings: View {
     }
     .padding()
     .onAppear(perform: launchAtLogin.refresh)
+#endif
   }
 }

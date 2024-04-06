@@ -6,6 +6,7 @@ import SwiftUI
 }
 #endif
 
+#if os(macOS)
 struct SettingsWindow: Scene {
   static let id = "settings"
   var body: some Scene {
@@ -16,6 +17,7 @@ struct SettingsWindow: Scene {
     }
   }
 }
+#endif
 
 private struct SettingsWindowContent: View {
 

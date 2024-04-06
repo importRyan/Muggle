@@ -11,6 +11,7 @@ struct AuthorizeBluetoothView: View {
       Text("Grant Bluetooth permissions to find nearby Ember mugs")
         .multilineTextAlignment(.center)
 
+      #if os(macOS)
       Button("Open Settings") {
         if let url = URL.settingsPrivacyBluetooth, NSWorkspace.shared.open(url) { return }
         if let url = URL.settingsPrivacy, NSWorkspace.shared.open(url) { return }
@@ -18,6 +19,7 @@ struct AuthorizeBluetoothView: View {
         Log.app.error("Invalid open settings URLs")
       }
       .keyboardShortcut(.defaultAction)
+      #endif
     }
     .padding(20)
   }

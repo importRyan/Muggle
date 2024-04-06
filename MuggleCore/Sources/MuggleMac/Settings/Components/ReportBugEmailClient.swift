@@ -1,7 +1,6 @@
-import AppKit
 import Common
-import Foundation
 import OSLog
+import SwiftUI
 
 final class ReportBugEmailClient: ObservableObject {
   @Published var isLoading = false
@@ -68,7 +67,11 @@ Thanks,
 \(logs ?? "")
 """
     ) else { return }
+    #if os(macOS)
     NSWorkspace.shared.open(url)
+    #elseif os(visionOS)
+    UIApplication.shared.open(url)
+    #endif
   }
 
   func collectLogs(predicate: NSPredicate?) async -> [DatedLog] {

@@ -72,10 +72,14 @@ fileprivate struct AppStoreIconRecipe: View {
     let renderer = ImageRenderer(content: body)
     renderer.isOpaque = false
     renderer.scale = scale
+    #if os(visionOS)
+    return renderer.uiImage!.pngData()!
+    #elseif os(macOS)
     guard let image = renderer.cgImage else { fatalError() }
     let bitmap = NSBitmapImageRep(cgImage: image)
     guard let data = bitmap.representation(using: .png, properties: [:]) else { fatalError() }
     return data
+    #endif
   }
 }
 #endif

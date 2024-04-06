@@ -1,3 +1,4 @@
+#if canImport(ServiceManagement)
 import Common
 import Combine
 import ServiceManagement
@@ -71,3 +72,4 @@ private extension LaunchAtLoginViewModel {
     }
   }
 }
+#endif
