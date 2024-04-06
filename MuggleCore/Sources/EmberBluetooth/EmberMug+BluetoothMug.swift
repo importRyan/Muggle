@@ -88,7 +88,7 @@ package extension EmberMug {
     .eraseToAnyPublisher()
   }
 
-  var ledStream: AnyPublisher<Color, Never> {
+  var ledStream: AnyPublisher<LEDState, Never> {
     led.$value.compactMap { $0 }.eraseToAnyPublisher()
   }
 

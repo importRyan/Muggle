@@ -31,7 +31,7 @@ package protocol BluetoothMug: AnyObject {
   var isConfiguringStream: AnyPublisher<Bool, Never> { get }
   var isConnectedAndReadyForCommands: Bool { get }
   var isConnectedAndReadyForCommandsStream: AnyPublisher<Bool, Never> { get }
-  var ledStream: AnyPublisher<Color, Never> { get }
+  var ledStream: AnyPublisher<LEDState, Never> { get }
   var name: String { get }
   var serialNumber: String? { get }
   var temperatureStream: AnyPublisher<AllTemperatureState, Never> { get }
@@ -86,14 +86,14 @@ package struct BatteryState: CustomDebugStringConvertible {
 }
 
 package enum BluetoothMugCommand: Equatable, CustomDebugStringConvertible {
-  case led(Color)
+  case led(LEDState)
   case targetTemperature(HeaterState)
   case unit(UnitTemperature)
 
   package var debugDescription: String {
     switch self {
     case .led(let newValue):
-      "led: \(newValue.description)"
+      "led: \(newValue.debugDescription)"
     case .targetTemperature(let newValue):
       "targetTemperature: \(newValue.debugDescription)"
     case .unit(let newValue):

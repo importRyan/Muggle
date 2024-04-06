@@ -26,7 +26,7 @@ struct DeviceLEDView: View {
       updates = mug.ledStream
         .combineLatest(mug.connectionStream)
         .sink { [weak self] led, connection in
-          self?.color = led.opacity(connection.isConnected ? 1 : 0.5)
+          self?.color = led.color.opacity(connection.isConnected ? 1 : 0.5)
         }
     }
   }

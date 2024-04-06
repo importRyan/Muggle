@@ -13,7 +13,7 @@ class EmberMug2SpecDelegate: CBMPeripheralSpecDelegate {
   var push = PushEvent.charging
 
   // Writeable
-  var led: [UInt8] = [255, 0, 246, 255]
+  var led = LEDState(color: .red, brightness: 1)
   var tempTarget = Double(0)
   var tempUnit = UnitTemperature.celsius
 }
@@ -39,7 +39,7 @@ extension EmberMug2SpecDelegate {
       case .hasContents:
         return Data([UInt8(hasContents ? 30 : 0)])
       case .led:
-        return Data(led)
+        return led.emberData
       case .push:
         return Data()
       case .serialNumber:
@@ -67,9 +67,9 @@ extension EmberMug2SpecDelegate {
     }
     switch gatt {
     case .led:
-      guard data.bytes.count == 4
+      guard let value = LEDState(ember: data)
       else { return .failure(CBMATTError(.unlikelyError)) }
-      led = data.bytes
+      led = value
 
     case .tempTarget:
       guard let rawValue: UInt16 = try? data.readInteger(from: 0)

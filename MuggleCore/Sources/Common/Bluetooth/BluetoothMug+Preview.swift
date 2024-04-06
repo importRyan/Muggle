@@ -16,7 +16,7 @@ package final class PreviewMug: ObservableObject, BluetoothMug {
   @Published package var hasContents: Bool?
   @Published package var isConfiguring = false
   @Published package var isBusy = false
-  @Published package var led: Color?
+  @Published package var led: LEDState?
   @Published package var name: String = "Ember"
   @Published package var serialNumber: String?
   @Published package var temperatureCurrentCelsius: Double?
@@ -66,7 +66,7 @@ package final class PreviewMug: ObservableObject, BluetoothMug {
   package var isConfiguringStream: AnyPublisher<Bool, Never> {
     $isConfiguring.eraseToAnyPublisher()
   }
-  package var ledStream: AnyPublisher<Color, Never> {
+  package var ledStream: AnyPublisher<LEDState, Never> {
     $led.compactMap { $0 }.eraseToAnyPublisher()
   }
   package var temperatureCurrent: TemperatureState? {
