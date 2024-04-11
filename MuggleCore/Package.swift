@@ -38,6 +38,10 @@ let package = Package(
         .product(name: "Collections", package: "swift-collections"),
       ]
     ),
+    .testTarget(
+      name: "MuggleBluetoothTests",
+      dependencies: ["MuggleBluetooth"]
+    ),
     .target(
       name: "MuggleMac",
       dependencies: ["Common", "MuggleBluetooth"]
