@@ -20,14 +20,18 @@ package extension BluetoothCentral {
   func setup() {
     if central == nil {
       Log.central.info(#function)
-      central = CBCentralManagerFactory.instance(
+      let central = CBCentralManagerFactory.instance(
         delegate: self,
         queue: .main,
         options: [
           CBCentralManagerOptionRestoreIdentifierKey: NSString(string: Bundle.main.uniqueAppIdentifier)
-        ]
+        ],
+        forceMock: CommandLine.arguments.contains("mock-bluetooth")
       )
-      isScanningUpdates = central?
+      self.central = central
+      self.isScanning = central.isScanning
+      self.status = central.state
+      isScanningUpdates = central
         .publisher(for: \.isScanning)
         .assign(to: \.isScanning, on: self)
     }
