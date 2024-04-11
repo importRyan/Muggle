@@ -2,13 +2,23 @@ import Combine
 import SwiftUI
 
 package extension BluetoothMug where Self == PreviewMug {
-  /// Intended for SwiftUI previews without hassling with a Nordic Mock
+  /// Intended for SwiftUI previews without a Nordic mock created by:
+  /// ```
+  /// EmberMug.init(
+  ///   CBMPeripheralPreview(.mug2(), state: .connected)
+  /// )
+  /// ```
   static func preview() -> PreviewMug {
     PreviewMug()
   }
 }
 
-/// Intended for SwiftUI previews without hassling with a Nordic Mock
+/// Intended for SwiftUI previews without a Nordic mock created by:
+/// ```
+/// EmberMug.init(
+///   CBMPeripheralPreview(.mug2(), state: .connected)
+/// )
+/// ```
 package final class PreviewMug: ObservableObject, BluetoothMug {
   @Published package var activity: MugActivity?
   @Published package var batteryState: BatteryState?
@@ -16,6 +26,7 @@ package final class PreviewMug: ObservableObject, BluetoothMug {
   @Published package var hasContents: Bool?
   @Published package var isConfiguring = false
   @Published package var isBusy = false
+  @Published package var isWriting = false
   @Published package var led: LEDState?
   @Published package var name: String = "Ember"
   @Published package var serialNumber: String?
@@ -47,7 +58,7 @@ package final class PreviewMug: ObservableObject, BluetoothMug {
   package var hasContentsStream: AnyPublisher<Bool, Never> {
     $hasContents.compactMap { $0 }.eraseToAnyPublisher()
   }
-  package var isBusyStream: AnyPublisher<Bool, Never> {
+  package var isWritingStream: AnyPublisher<Bool, Never> {
     $isBusy.eraseToAnyPublisher()
   }
   package var isConnectedAndReadyForCommands: Bool {

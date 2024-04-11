@@ -24,7 +24,7 @@ struct DeviceWriteActivityIndicatorView: View {
     init(mug: BluetoothMug) {
       updates = Publishers.CombineLatest3(
         mug.connectionStream,
-        mug.isBusyStream,
+        mug.isWritingStream,
         mug.isConfiguringStream
       )
       .sink { [weak self] connection, isBusy, isConfiguring in

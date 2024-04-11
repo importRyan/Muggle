@@ -21,7 +21,7 @@ package final class EmberMug: NSObject {
   let push = PushEventCharacteristic()
 
   // Writeable
-  let led = LEDColorCharacteristic()
+  let color = LEDColorCharacteristic()
   let tempTarget = TargetTemperatureCharacteristic()
   let tempUnit = TemperatureUnitPreferenceCharacteristic()
   let writes = Writes()
@@ -161,7 +161,7 @@ extension EmberMug {
     case .activity: activityCharacteristic
     case .battery: battery
     case .push: push
-    case .led: led
+    case .led: color
     case .serialNumber: serial
     }
   }

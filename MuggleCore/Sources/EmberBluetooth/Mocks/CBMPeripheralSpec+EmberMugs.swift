@@ -2,8 +2,14 @@ import Common
 import Foundation
 
 package extension CBMPeripheralSpec {
-  static let mug2Connectable = CBMPeripheralSpec
-    .simulatePeripheral()
+  static func mug2(
+    id: UUID = UUID(uuidString: "11111111-1111-1111-1111-111111111111")!,
+    proximity: CBMProximity = .immediate
+  ) -> CBMPeripheralSpec {
+    simulatePeripheral(
+      identifier: id,
+      proximity: proximity
+    )
     .advertising(
       advertisementData: [
         CBAdvertisementDataLocalNameKey: "Ember Ceramic Mug",
@@ -20,4 +26,5 @@ package extension CBMPeripheralSpec {
       mtu: 186
     )
     .build()
+  }
 }

@@ -27,10 +27,12 @@ package protocol BluetoothMug: AnyObject {
   var connectionStream: AnyPublisher<ConnectionStatus, Never> { get }
   var hasContents: Bool? { get }
   var hasContentsStream: AnyPublisher<Bool, Never> { get }
-  var isBusyStream: AnyPublisher<Bool, Never> { get }
   var isConfiguringStream: AnyPublisher<Bool, Never> { get }
   var isConnectedAndReadyForCommands: Bool { get }
   var isConnectedAndReadyForCommandsStream: AnyPublisher<Bool, Never> { get }
+  var isWriting: Bool { get }
+  var isWritingStream: AnyPublisher<Bool, Never> { get }
+  var led: LEDState? { get }
   var ledStream: AnyPublisher<LEDState, Never> { get }
   var name: String { get }
   var serialNumber: String? { get }

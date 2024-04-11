@@ -25,7 +25,7 @@ extension EmberMug: BluetoothMug {
       return
     }
     let data = switch command {
-    case .led(let newValue): led.encode(newValue)
+    case .led(let newValue): color.encode(newValue)
     case .targetTemperature(let newValue): tempTarget.encode(newValue)
     case .unit(let newValue): tempUnit.encode(newValue)
     }
@@ -65,10 +65,6 @@ package extension EmberMug {
     hasContentsCharacteristic.$value.compactMap { $0 }.eraseToAnyPublisher()
   }
 
-  var isBusyStream: AnyPublisher<Bool, Never> {
-    writes.$awaitingResponse.map { !$0.isEmpty }.eraseToAnyPublisher()
-  }
-
   var isConfiguringStream: AnyPublisher<Bool, Never> {
     $setupStepsRemaining.map { !$0.isEmpty }.eraseToAnyPublisher()
   }
@@ -88,8 +84,21 @@ package extension EmberMug {
     .eraseToAnyPublisher()
   }
 
+
+  var isWriting: Bool {
+    !writes.awaitingResponse.isEmpty
+  }
+
+  var isWritingStream: AnyPublisher<Bool, Never> {
+    writes.$awaitingResponse.map { !$0.isEmpty }.eraseToAnyPublisher()
+  }
+
+  var led: LEDState? {
+    color.value
+  }
+
   var ledStream: AnyPublisher<LEDState, Never> {
-    led.$value.compactMap { $0 }.eraseToAnyPublisher()
+    color.$value.compactMap { $0 }.eraseToAnyPublisher()
   }
 
   var serialNumber: String? {
