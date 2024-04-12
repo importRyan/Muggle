@@ -15,6 +15,7 @@ package final class BluetoothCentral: NSObject, ObservableObject {
   private let known = KnownPeripheralsRegistry(persistence: .default)
 
   #if DEBUG
+  /// - Parameter configure: Call `CBMCentralManagerMock` methods to register devices and set authorization state.
   package static func mocked(configure: (BluetoothCentral) -> Void) -> BluetoothCentral {
     let central = BluetoothCentral()
     configure(central)
