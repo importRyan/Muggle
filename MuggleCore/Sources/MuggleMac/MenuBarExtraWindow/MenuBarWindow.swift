@@ -2,6 +2,18 @@ import Common
 import MuggleBluetooth
 import SwiftUI
 
+#if DEBUG
+#Preview {
+  MenuBarWindow(
+    central: .mocked { central in
+      CBMCentralManagerMock.simulateInitialState(.poweredOn)
+      CBMCentralManagerMock.simulateAuthorization(.allowedAlways)
+      CBMCentralManagerMock.simulatePeripherals([.advertising()])
+    }
+  )
+}
+#endif
+
 struct MenuBarWindow: View {
   @ObservedObject var central: BluetoothCentral
   @Environment(\.isPresented) var isPresented

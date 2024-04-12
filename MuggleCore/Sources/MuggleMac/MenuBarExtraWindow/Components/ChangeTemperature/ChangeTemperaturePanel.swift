@@ -1,13 +1,13 @@
 import Common
 import Combine
-import EmberBluetooth
+import MuggleBluetooth
 import SwiftUI
 
 #if DEBUG
 #Preview {
   ChangeTemperaturePanel(
     isHovering: true,
-    viewModel: .init(mug: .preview())
+    viewModel: .init(mug: .previewMug())
   )
   .fixedSize()
   .padding(20)

@@ -29,7 +29,7 @@ extension PushEventCharacteristic: BluetoothCharacteristic {
   }
 }
 
-enum PushEvent: Int {
+package enum PushEvent: Int {
   case battery = 1
   case charging
   case notCharging
@@ -40,7 +40,7 @@ enum PushEvent: Int {
 }
 
 extension PushEvent: CustomDebugStringConvertible {
-  var debugDescription: String {
+  package var debugDescription: String {
     switch self {
     case .battery: "battery"
     case .charging: "charging"

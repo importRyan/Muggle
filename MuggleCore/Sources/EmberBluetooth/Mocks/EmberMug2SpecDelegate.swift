@@ -1,26 +1,28 @@
 import Common
 import Foundation
 
-class EmberMug2SpecDelegate: CBMPeripheralSpecDelegate {
+package class EmberMug2SpecDelegate {
   // Reading
-  var activity = EmberMugActivity.empty
-  var battery = BatteryState(percent: 1, isCharging: true)
-  var hasContents = false
-  var serial: [UInt8] =  [197, 172, 22, 184, 120, 206, 80, 66, 66, 71, 49, 52, 49, 48, 53, 48, 54, 55]
-  var tempCurrent = Double(0)
+  package var activity = EmberMugActivity.empty
+  package var battery = BatteryState(percent: 1, isCharging: true)
+  package var hasContents = false
+  package var serial: [UInt8] =  [197, 172, 22, 184, 120, 206, 80, 66, 66, 71, 49, 52, 49, 48, 53, 48, 54, 55]
+  package var tempCurrent = Double(0)
 
   // Notifying
-  var push = PushEvent.charging
+  package var push = PushEvent.charging
 
   // Writeable
-  var led = LEDState(color: .red, brightness: 1)
-  var tempTarget = Double(0)
-  var tempUnit = UnitTemperature.celsius
+  package var led = LEDState(color: .red, brightness: 1)
+  package var tempTarget = Double(0)
+  package var tempUnit = UnitTemperature.celsius
+
+  package init() {}
 }
 
-extension EmberMug2SpecDelegate {
+extension EmberMug2SpecDelegate: CBMPeripheralSpecDelegate {
 
-  func peripheral(
+  package func peripheral(
     _ peripheral: CBMPeripheralSpec,
     didReceiveReadRequestFor characteristic: CBMCharacteristicMock
   ) -> Result<Data, any Error> {
@@ -57,7 +59,7 @@ extension EmberMug2SpecDelegate {
     return .success(data)
   }
 
-  func peripheral(
+  package func peripheral(
     _ peripheral: CBMPeripheralSpec,
     didReceiveWriteRequestFor characteristic: CBMCharacteristicMock,
     data: Data

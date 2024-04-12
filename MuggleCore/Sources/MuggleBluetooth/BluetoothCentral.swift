@@ -5,7 +5,6 @@ import Foundation
 import OrderedCollections
 
 package final class BluetoothCentral: NSObject, ObservableObject {
-
   @Published package var peripherals: OrderedDictionary<UUID, BluetoothMug & BluetoothPeripheral> = [:]
   @Published package var status = CBManagerState.unknown
   @Published package var isScanning = false
@@ -14,10 +13,24 @@ package final class BluetoothCentral: NSObject, ObservableObject {
   private var stopScanTimer: AnyCancellable?
   private var stopScanTimerExpiration: Date?
   private let known = KnownPeripheralsRegistry(persistence: .default)
+
+  #if DEBUG
+  package static func mocked(configure: (BluetoothCentral) -> Void) -> BluetoothCentral {
+    let central = BluetoothCentral()
+    configure(central)
+    central.setup(forceMock: true)
+    return central
+  }
+  #endif
 }
 
 package extension BluetoothCentral {
+  
   func setup() {
+    setup(forceMock: false)
+  }
+
+  private func setup(forceMock: Bool) {
     if central == nil {
       Log.central.info(#function)
       let central = CBCentralManagerFactory.instance(
@@ -26,7 +39,7 @@ package extension BluetoothCentral {
         options: [
           CBCentralManagerOptionRestoreIdentifierKey: NSString(string: Bundle.main.uniqueAppIdentifier)
         ],
-        forceMock: CommandLine.arguments.contains("mock-bluetooth")
+        forceMock: forceMock || CommandLine.arguments.contains("mock-bluetooth")
       )
       self.central = central
       self.isScanning = central.isScanning

@@ -3,6 +3,19 @@ import Common
 import MuggleBluetooth
 import SwiftUI
 
+#if DEBUG
+#Preview {
+  MenuBarExtraIcon(viewModel: .init(
+    central: .mocked { central in
+      CBMCentralManagerMock.simulateInitialState(.poweredOn)
+      CBMCentralManagerMock.simulateAuthorization(.allowedAlways)
+      CBMCentralManagerMock.simulatePeripherals([.advertising()])
+    }
+  ))
+  .padding()
+}
+#endif
+
 struct MenuBarExtraIcon: View {
 
   @StateObject var viewModel: ViewModel

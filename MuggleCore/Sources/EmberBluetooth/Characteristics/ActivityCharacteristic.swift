@@ -16,7 +16,7 @@ extension ActivityCharacteristic: BluetoothCharacteristic {
   }
 }
 
-enum EmberMugActivity: Int {
+package enum EmberMugActivity: Int {
   case adjustingHeater = 0
   case empty = 1
   case filling = 2
@@ -25,7 +25,7 @@ enum EmberMugActivity: Int {
   case heating = 5
   case holding = 6
 
-  var activity: MugActivity {
+  package var activity: MugActivity {
     switch self {
     case .adjustingHeater: .adjustingHeater
     case .empty: .standby
@@ -39,7 +39,7 @@ enum EmberMugActivity: Int {
 }
 
 extension EmberMugActivity: CustomDebugStringConvertible {
-  var debugDescription: String {
+  package var debugDescription: String {
     switch self {
     case .adjustingHeater: "Adjusting Heat"
     case .empty: "Standby"

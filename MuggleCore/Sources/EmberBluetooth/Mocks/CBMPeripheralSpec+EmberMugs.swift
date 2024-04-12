@@ -2,7 +2,7 @@ import Common
 import Foundation
 
 package extension CBMPeripheralSpec {
-  static func mug2(
+  static func advertising(
     id: UUID = UUID(uuidString: "11111111-1111-1111-1111-111111111111")!,
     proximity: CBMProximity = .immediate
   ) -> CBMPeripheralSpec {
@@ -23,6 +23,25 @@ package extension CBMPeripheralSpec {
       services: [.ember],
       delegate: EmberMug2SpecDelegate(),
       connectionInterval: 0.045,
+      mtu: 186
+    )
+    .build()
+  }
+
+  static func connected(
+    delegate: CBMPeripheralSpecDelegate = EmberMug2SpecDelegate(),
+    services: [CBMServiceMock] = [.ember]
+  ) -> CBMPeripheralSpec {
+    simulatePeripheral(
+      identifier: UUID(uuidString: "11111111-2222-2222-2222-111111111111")!,
+      proximity: .immediate
+    )
+    .allowForRetrieval()
+    .connected(
+      name: "Preview Mug",
+      services: services,
+      delegate: delegate,
+      connectionInterval: 0.001,
       mtu: 186
     )
     .build()

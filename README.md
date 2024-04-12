@@ -12,7 +12,7 @@ Given the macOS menu bar application, this repo is simple:
 
 ## To-dos
 V1.0
-- [ ] Nordic integration tests
+- [x] Nordic integration tests
 - [ ] App icon inset
 - [ ] Sort eager first responder highlighting (is this keyboard navigation?)
 - [ ] Add boot on login to footer during onboarding

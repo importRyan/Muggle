@@ -12,7 +12,7 @@ final class ConnectionTests: XCTestCase {
   }
 
   func testMug_OnConnect_KeyCharacteristicsPopulate() {
-    let mug = CBMPeripheralSpec.mug2(proximity: .immediate)
+    let mug = CBMPeripheralSpec.advertising(proximity: .immediate)
     var test = testBluetoothCentral(connect: mug)
 
     test.onFirstConnection
@@ -31,7 +31,7 @@ final class ConnectionTests: XCTestCase {
   }
 
   func testCentral_OnDisconnect_AutoReconnects() {
-    let mug = CBMPeripheralSpec.mug2(proximity: .immediate)
+    let mug = CBMPeripheralSpec.advertising(proximity: .immediate)
     var test = testBluetoothCentral(connect: mug)
 
     let (disconnect, reconnect) = (XCTestExpectation(), XCTestExpectation())
@@ -58,7 +58,7 @@ final class ConnectionTests: XCTestCase {
     var subs = Set<AnyCancellable>()
 
     // Arrange
-    let peripheral = CBMPeripheralSpec.mug2()
+    let peripheral = CBMPeripheralSpec.advertising()
     CBMCentralManagerMock.simulateAuthorization(.notDetermined)
     CBMCentralManagerMock.simulatePeripherals([peripheral])
     let central = BluetoothCentral()
