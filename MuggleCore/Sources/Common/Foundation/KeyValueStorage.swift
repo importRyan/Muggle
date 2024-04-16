@@ -2,6 +2,7 @@ import Foundation
 
 package protocol KeyValueStore {
   subscript<T>(key: StorageKey<T>) -> T? { get nonmutating set }
+  subscript<T>(key: StorageKey<T>, default defaultValue: T) -> T { get nonmutating set }
 }
 
 package struct StorageKey<Value> {
@@ -16,11 +17,21 @@ extension NSUbiquitousKeyValueStore: KeyValueStore {
     get { object(forKey: key.key) as? T }
     set { set(newValue, forKey: key.key) }
   }
+
+  package subscript<T>(key: StorageKey<T>, default defaultValue: T) -> T {
+    get { object(forKey: key.key) as? T ?? defaultValue }
+    set { set(newValue, forKey: key.key) }
+  }
 }
 
 extension UserDefaults: KeyValueStore {
   package subscript<T>(key: StorageKey<T>) -> T? {
     get { object(forKey: key.key) as? T }
+    set { set(newValue, forKey: key.key) }
+  }
+
+  package subscript<T>(key: StorageKey<T>, default defaultValue: T) -> T {
+    get { object(forKey: key.key) as? T ?? defaultValue }
     set { set(newValue, forKey: key.key) }
   }
 }
