@@ -9,11 +9,15 @@ import SwiftUI
 #if os(macOS)
 struct SettingsWindow: Scene {
   static let id = "settings"
+
+  let delegate: MacAppDelegate
+
   var body: some Scene {
     // Workaround for window toolbar customization
     Window("Muggle Settings", id: SettingsWindow.id) {
       SettingsWindowContent()
         .padding()
+        .environmentObject(delegate)
     }
   }
 }

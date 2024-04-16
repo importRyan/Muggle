@@ -3,12 +3,17 @@ import MuggleBluetooth
 import SwiftUI
 
 struct MenuBarExtraScene: Scene {
-  let central: BluetoothCentral
+  let delegate: MacAppDelegate
 
   var body: some Scene {
     MenuBarExtra(
-      content: { MenuBarWindow(central: central) },
-      label: { MenuBarExtraIcon(viewModel: .init(central: central)) }
+      content: { 
+        MenuBarWindow(central: delegate.central)
+          .environmentObject(delegate)
+      },
+      label: {
+        MenuBarExtraIcon(viewModel: .init(central: delegate.central))
+      }
     )
     .menuBarExtraStyle(.window)
   }
