@@ -1,14 +1,11 @@
+#if os(visionOS)
 import MuggleBluetooth
 import SwiftUI
-#if os(visionOS)
-    public struct VisionOSRootScene: Scene {
+
+public struct VisionOSRootScene: Scene {
 
   public init(delegate: VisionOSAppDelegate) {
     self.central = delegate.central
-  }
-
-  package init(central: BluetoothCentral) {
-    self.central = central
   }
 
   private let central: BluetoothCentral
