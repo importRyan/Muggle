@@ -6,11 +6,14 @@ import SwiftUI
 #if DEBUG
 #Preview {
   MenuBarExtraIcon(viewModel: .init(
-    central: .mocked { central in
-      CBMCentralManagerMock.simulateInitialState(.poweredOn)
-      CBMCentralManagerMock.simulateAuthorization(.allowedAlways)
-      CBMCentralManagerMock.simulatePeripherals([.advertising()])
-    }
+    central: .mocked(
+      knownPeripheralsStore: KnownPeripheralsStore.live(store: .ephemeral),
+      configure: { central in
+        CBMCentralManagerMock.simulateInitialState(.poweredOn)
+        CBMCentralManagerMock.simulateAuthorization(.allowedAlways)
+        CBMCentralManagerMock.simulatePeripherals([.advertising()])
+      }
+    )
   ))
   .padding()
 }

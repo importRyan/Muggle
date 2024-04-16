@@ -1,7 +1,6 @@
 import Combine
 import Common
 import XCTest
-import EmberBluetooth
 @testable import MuggleBluetooth
 
 final class ConnectionTests: XCTestCase {
@@ -61,8 +60,10 @@ final class ConnectionTests: XCTestCase {
     let peripheral = CBMPeripheralSpec.advertising()
     CBMCentralManagerMock.simulateAuthorization(.notDetermined)
     CBMCentralManagerMock.simulatePeripherals([peripheral])
-    let central = BluetoothCentral()
-    central.setup()
+    let central = BluetoothCentral.mocked(
+      knownPeripheralsStore: .live(store: .ephemeral),
+      configure: { _ in }
+    )
     central.$status
       .filter { $0 == .poweredOn }
       .fulfill(powersOnAfterAuthorization, &subs)
@@ -95,8 +96,10 @@ private extension XCTestCase {
     CBMCentralManagerMock.simulateInitialState(.poweredOn)
     CBMCentralManagerMock.simulatePeripherals([peripheral])
 
-    let central = BluetoothCentral()
-    central.setup()
+    let central = BluetoothCentral.mocked(
+      knownPeripheralsStore: .live(store: .ephemeral),
+      configure: { _ in }
+    )
 
     let didConnect = XCTestExpectation()
     let onFirstConnection = central.$peripherals

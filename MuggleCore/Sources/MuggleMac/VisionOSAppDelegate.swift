@@ -2,7 +2,9 @@ import MuggleBluetooth
 import SwiftUI
 #if os(visionOS)
 public final class VisionOSAppDelegate: NSObject {
-  package let central = BluetoothCentral()
+  package lazy private(set) var central = BluetoothCentral(
+    knownPeripheralsStore: .live(store: UserDefaults.standard)
+  )
 }
 
 extension VisionOSAppDelegate: UIApplicationDelegate {

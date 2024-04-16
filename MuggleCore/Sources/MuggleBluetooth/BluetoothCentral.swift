@@ -12,12 +12,20 @@ package final class BluetoothCentral: NSObject, ObservableObject {
   private var isScanningUpdates: AnyCancellable?
   private var stopScanTimer: AnyCancellable?
   private var stopScanTimerExpiration: Date?
-  private let known = KnownPeripheralsRegistry(persistence: .default)
+  private let known: KnownPeripheralsStore
+
+  package init(knownPeripheralsStore: KnownPeripheralsStore) {
+    self.known = knownPeripheralsStore
+    super.init()
+  }
 
   #if DEBUG
   /// - Parameter configure: Call `CBMCentralManagerMock` methods to register devices and set authorization state.
-  package static func mocked(configure: (BluetoothCentral) -> Void) -> BluetoothCentral {
-    let central = BluetoothCentral()
+  package static func mocked(
+    knownPeripheralsStore: KnownPeripheralsStore,
+    configure: (BluetoothCentral) -> Void
+  ) -> BluetoothCentral {
+    let central = BluetoothCentral(knownPeripheralsStore: knownPeripheralsStore)
     configure(central)
     central.setup(forceMock: true)
     return central
@@ -86,8 +94,9 @@ extension BluetoothCentral: CBCentralManagerDelegate {
     Log.central.info("\(#function) \(central.state.debugDescription)")
     status = central.state
     if status == .poweredOn && peripherals.isEmpty {
-      populateCurrentlyConnectedEmberProducts()
       populatePastPeripherals()
+      // TODO: - Travel Mug Support
+      populateEmberMugsCurrentlyConnectedByOtherApps()
       scanForEmberProducts()
       scheduleScanStop(after: 5 * 60)
     } else if status == .poweredOn {
@@ -115,16 +124,21 @@ extension BluetoothCentral: CBCentralManagerDelegate {
     advertisementData: [String : Any],
     rssi RSSI: NSNumber
   ) {
-    if peripherals.keys.contains(peripheral.identifier) { return }
-    let name = peripheral.name ?? "unknown"
-    let manufacturerData = advertisementData.manufacturerData?.bytes ?? []
-    guard advertisementData.advertisedServices.contains(.ember.service) else {
-      Log.central.error("didDiscover non-Ember product \(name) \(peripheral.identifier) \(manufacturerData)")
+    if let existing = peripherals[peripheral.identifier] {
+      if existing.connection.isNotConnected {
+        connect(existing)
+      }
       return
     }
-    Log.central.info("didDiscover \(name) \(peripheral.identifier) \(manufacturerData)")
-    let mug = registerEmber(peripheral, previouslyConnected: nil)
-    connect(mug)
+    let name = peripheral.name ?? "unknown"
+    let manufacturerData = advertisementData.manufacturerData?.bytes ?? []
+    do {
+      Log.central.info("didDiscover \(name) \(peripheral.identifier) \(manufacturerData)")
+      let mug = try registerNew(peripheral, advertisementData.advertisedServices)
+      connect(mug)
+    } catch {
+      Log.central.error("didDiscover unsupported product \(name) \(manufacturerData)")
+    }
   }
 
   package func centralManager(
@@ -162,18 +176,22 @@ extension BluetoothCentral: CBCentralManagerDelegate {
   package func centralManager(_ central: CBCentralManager, willRestoreState dict: [String : Any]) {
     guard let restorablePeripherals = dict[CBCentralManagerRestoredStatePeripheralsKey] as? [CBPeripheral] else { return }
     Log.central.info("willRestoreState for: \(restorablePeripherals.map(\.identifier))")
-    let knownPeripherals = known.peripheralsByLocalIds()
-
     for peripheral in restorablePeripherals {
       if let existing = peripherals[peripheral.identifier] {
         connect(existing)
         continue
       }
-      guard peripheral.services?.map(\.uuid).contains(where: { $0 == .ember.service }) == true else {
-        Log.central.error("willRestoreState unrecognized product \(peripheral.name ?? "") \(peripheral.identifier) services: \(peripheral.services?.map(\.uuid) ?? [])")
+      guard let knownPeripheral = known.peripherals()[peripheral.identifier] else {
+        Log.central.error("willRestoreState for unrecognized peripheral: \(peripheral.identifier) services: \(peripheral.services?.map(\.uuid) ?? [])")
+        do {
+          let mug = try registerNew(peripheral, Set(peripheral.services?.map(\.uuid) ?? []))
+          connect(mug)
+        } catch {
+          Log.central.error("willRestoreState failed to re-register unsupported peripheral: \(peripheral.identifier)")
+        }
         continue
       }
-      let mug = registerEmber(peripheral, previouslyConnected: knownPeripherals[peripheral.identifier])
+      let mug = registerKnown(peripheral, knownPeripheral)
       connect(mug)
     }
   }
@@ -190,70 +208,94 @@ private extension BluetoothCentral {
     ])
   }
 
-  func registerEmber(_ newPeripheral: CBPeripheral, previouslyConnected: KnownPeripheral?) -> BluetoothMug & BluetoothPeripheral {
-    if let alreadyRegistered = peripherals[newPeripheral.identifier] {
-      return alreadyRegistered
+  /// TODO: - Travel Mug Support
+  func populateEmberMugsCurrentlyConnectedByOtherApps() {
+    guard let central else {
+      Log.central.error("\(#function) Central Not Instantiated")
+      return
     }
-    let mug = EmberMug(newPeripheral)
-    let knownPeripheral = previouslyConnected ?? KnownPeripheral(
-      localBluetoothIds: [newPeripheral.identifier],
-      name: mug.name,
-      serial: previouslyConnected?.serial ?? ""
-    )
-    mug.configure(
-      knownSerial: previouslyConnected?.serial,
-      onSerialNumberUpdate: { [weak self] updatedSerial in
-        guard let self else { return }
-        var update = knownPeripheral
-        update.serial = updatedSerial
-        self.known.update(update)
+    let emberMugs = central.retrieveConnectedPeripherals(withServices: [.ember.service])
+    Log.central.info("\(#function) Found \(emberMugs.count) Currently Connected Ember Products")
+    for mug in emberMugs {
+      do {
+        let registeredMug = try registerNew(mug, [.ember.service])
+        connect(registeredMug)
+      } catch {
+        Log.central.error("\(#function) Unsupported Product \(mug.name ?? "") \(mug.identifier)")
       }
-    )
-    peripherals[newPeripheral.identifier] = mug
-    return mug
-  }
-
-  func populateCurrentlyConnectedEmberProducts() {
-    let connectedEmberPeripherals = central?.retrieveConnectedPeripherals(withServices: [.ember.service]) ?? []
-    if connectedEmberPeripherals.isEmpty {
-      Log.central.info("\(#function) No Currently Connected Ember Products")
-    } else {
-      Log.central.info("\(#function) Found Currently Connected Ember Products \(connectedEmberPeripherals.map(\.identifier))")
-    }
-    let knownPeripherals = known.peripheralsByLocalIds()
-    for peripheral in connectedEmberPeripherals {
-      let mug = registerEmber(peripheral, previouslyConnected: knownPeripherals[peripheral.identifier])
-      connect(mug)
     }
   }
 
   func populatePastPeripherals() {
-    let knownPeripheralDescriptors = known.peripherals.values.map { [$0.name, $0.serial].joined(separator: " ") }
-    Log.central.info("\(#function) Attempting to Retrieve: \(knownPeripheralDescriptors.joined(separator: ","))")
-
-    let knownPeripherals = known.peripheralsByLocalIds()
-    let retrievedEmberPeripherals = central?.retrievePeripherals(withIdentifiers: Array(knownPeripherals.keys)) ?? []
-
-    if retrievedEmberPeripherals.isEmpty {
-      Log.central.info("\(#function) No Past Ember Products")
-    } else {
-      Log.central.info("\(#function) Retrieved \(retrievedEmberPeripherals.map(\.identifier))")
+    guard let central else {
+      Log.central.error("\(#function) \(Self.self) Not Setup")
+      return
     }
+    Log.central.info("\(#function) Known: \(self.known.peripherals().values.map { [$0.mug.name, $0.localCBUUID.uuidString, $0.mug.serial].joined(separator: " ") }.joined(separator: ","))")
+    if known.peripherals().isEmpty { return }
 
-    for peripheral in retrievedEmberPeripherals {
-      let mug = registerEmber(peripheral, previouslyConnected: knownPeripherals[peripheral.identifier])
+    let retrievedPeripherals = central.retrievePeripherals(withIdentifiers: known.peripherals().values.map(\.localCBUUID))
+    Log.central.info("\(#function) Retrieved \(retrievedPeripherals.count): \(retrievedPeripherals.map(\.identifier))")
+
+    for peripheral in retrievedPeripherals {
+      guard let knownPeripheral = known.peripherals()[peripheral.identifier] else {
+        Log.central.error("\(#function) Expected Peripheral Not Found \(peripheral.identifier)")
+        continue
+      }
+      let mug = registerKnown(peripheral, knownPeripheral)
       connect(mug)
     }
   }
-}
 
-private extension [String : Any] {
-  var advertisedServices: Set<CBUUID> {
-    let services = self[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID]
-    return Set(services ?? [])
+  func registerKnown(
+    _ newPeripheral: CBPeripheral,
+    _ previouslyConnected: LocalKnownBluetoothMug
+  ) -> BluetoothMug & BluetoothPeripheral {
+    if let alreadyRegistered = peripherals[newPeripheral.identifier] {
+      return alreadyRegistered
+    }
+    let mug = previouslyConnected.mug.model.build(newPeripheral)
+    peripherals[newPeripheral.identifier] = mug
+    mug.configure(
+      known: previouslyConnected,
+      onUpdate: { [weak self] identity in
+        self?.known.updatePeripheral(identity)
+      }
+    )
+    return mug
   }
 
-  var manufacturerData: Data? {
-    self[CBAdvertisementDataManufacturerDataKey] as? Data
+  func registerNew(
+    _ newPeripheral: CBPeripheral,
+    _ advertisedServices: Set<CBUUID>
+  ) throws -> BluetoothMug & BluetoothPeripheral {
+    if let alreadyRegistered = peripherals[newPeripheral.identifier] {
+      return alreadyRegistered
+    }
+    guard let model = BluetoothMugModel.EmberModel(advertisedServices: advertisedServices) else {
+      throw BluetoothCentralError.unsupportedDevice
+    }
+    let mug = model.build(newPeripheral)
+    peripherals[newPeripheral.identifier] = mug
+    mug.configure(
+      known: nil,
+      onUpdate: { [weak self] identity in
+        self?.known.updatePeripheral(identity)
+      }
+    )
+    return mug
+  }
+}
+
+private enum BluetoothCentralError: Error {
+  case unsupportedDevice
+}
+
+private extension BluetoothMugModel {
+  func build(_ peripheral: CBPeripheral) -> BluetoothMug & BluetoothPeripheral {
+    switch self {
+    case .ember(let model):
+      model.build(peripheral)
+    }
   }
 }

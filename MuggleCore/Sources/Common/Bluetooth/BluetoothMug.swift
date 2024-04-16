@@ -11,8 +11,8 @@ package protocol BluetoothPeripheral: AnyObject {
   var debugShortIdentifier: String { get }
   var debugAllIdentifiers: String { get }
   func configure(
-    knownSerial: String?,
-    onSerialNumberUpdate: @escaping (String) -> Void
+    known: LocalKnownBluetoothMug?,
+    onUpdate: @escaping (LocalKnownBluetoothMug) -> Void
   )
 }
 

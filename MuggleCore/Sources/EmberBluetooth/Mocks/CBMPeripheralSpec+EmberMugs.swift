@@ -13,7 +13,7 @@ package extension CBMPeripheralSpec {
     .advertising(
       advertisementData: [
         CBAdvertisementDataLocalNameKey: "Ember Ceramic Mug",
-        CBAdvertisementDataServiceUUIDsKey: [EmberMug.GATT.service],
+        CBAdvertisementDataServiceUUIDsKey: [EmberGATT.service],
         CBAdvertisementDataIsConnectable: true as NSNumber
       ],
       withInterval: 0.250

@@ -2,7 +2,9 @@ import MuggleBluetooth
 import SwiftUI
 #if os(macOS)
 public final class MacAppDelegate: NSObject {
-  package let central = BluetoothCentral()
+  package lazy private(set) var central = BluetoothCentral(
+    knownPeripheralsStore: .live(store: UserDefaults.standard)
+  )
 }
 
 extension MacAppDelegate: NSApplicationDelegate {

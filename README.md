@@ -14,12 +14,13 @@ Given the macOS menu bar application, this repo is simple:
 V1.0
 - [x] Nordic integration tests
 - [ ] App icon inset
-- [ ] Sort eager first responder highlighting (is this keyboard navigation?)
 - [ ] Add boot on login to footer during onboarding
-- [ ] Test Flight (privacy, XCC, solicit tests for non Mug 2 devices)
+- [ ] Test Flight (privacy, XCC, solicit testers)
 
 V1.1
 - [ ] Vision Pro (as central)
+- [ ] Sort eager Settings button first responder highlighting if opened while scanning
+- [ ] Confirm Travel mug support (HasContentsCharacteristic)
 
 V1.2
 - [ ] Vision Pro (as shared client)

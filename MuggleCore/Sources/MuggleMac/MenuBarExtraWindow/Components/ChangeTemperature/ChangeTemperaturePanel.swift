@@ -7,7 +7,7 @@ import SwiftUI
 #Preview {
   ChangeTemperaturePanel(
     isHovering: true,
-    viewModel: .init(mug: .previewMug())
+    viewModel: .init(mug: MockBluetoothMug().connected())
   )
   .fixedSize()
   .padding(20)

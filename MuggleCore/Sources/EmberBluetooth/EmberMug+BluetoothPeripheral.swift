@@ -1,46 +1,33 @@
 import Common
 
 extension EmberMug: BluetoothPeripheral {
-  package func configure(
-    knownSerial: String?,
-    onSerialNumberUpdate: @escaping (String) -> Void
+  func configure(
+    known: LocalKnownBluetoothMug?,
+    onUpdate: @escaping (LocalKnownBluetoothMug) -> Void
   ) {
-    peripheral.delegate = self
-    self.onSerialNumberUpdate = onSerialNumberUpdate
+    self.onIdentityUpdate = onUpdate
 
-    if let knownSerial {
+    if let knownSerial = known?.mug.serial {
       self.serial.value = knownSerial
       setupStepsRemaining.remove(.serialNumber)
     }
 
-    onConnection = $connection
-      .filter { $0 == .connected }
-      .sink { [weak peripheral, weak self] _ in
-        guard let self else { return }
-        if setupStepsRemaining.isEmpty {
-          onReconnect()
-          return
-        }
-        Log.ember.info("\(self.debugShortIdentifier) onConnection request discoverServices")
-        peripheral?.discoverServices(nil)
-      }
-
-    Log.ember.info("\(self.debugShortIdentifier) configured \(Self.self) serial: \(knownSerial ?? "unknown") local: \(self.peripheral.identifier)")
+    Log.ember.info("\(self.debugShortIdentifier) configured \(Self.self) serial: \(known?.mug.serial ?? "unknown") local: \(self.peripheral.identifier)")
   }
 
-  package var debugShortIdentifier: String {
+  var debugShortIdentifier: String {
     serialNumber ?? peripheral.identifier.uuidString
   }
 
-  package var debugAllIdentifiers: String {
+  var debugAllIdentifiers: String {
     [(serialNumber ?? ""), peripheral.identifier.uuidString].joined(separator: " ")
   }
 
-  package var isSetUp: Bool {
+  var isSetUp: Bool {
     setupStepsRemaining.isEmpty
   }
 
-  package var name: String {
+  var name: String {
     peripheral.name ?? "Ember"
   }
 }

@@ -4,8 +4,8 @@ import Foundation
 import SwiftUI
 
 extension EmberMug: BluetoothMug {
-  package func send(_ command: BluetoothMugCommand) {
-    let gatt: GATT.Characteristics = switch command {
+  func send(_ command: BluetoothMugCommand) {
+    let gatt: EmberGATT.Characteristics = switch command {
     case .led: .led
     case .targetTemperature: .tempTarget
     case .unit: .tempUnitPreference
@@ -35,7 +35,7 @@ extension EmberMug: BluetoothMug {
   }
 }
 
-package extension EmberMug {
+extension EmberMug {
 
   var activity: MugActivity? {
     activityCharacteristic.value?.activity

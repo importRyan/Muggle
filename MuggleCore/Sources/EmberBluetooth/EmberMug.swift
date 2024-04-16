@@ -3,17 +3,18 @@ import Combine
 import Foundation
 import OrderedCollections
 
-package final class EmberMug: NSObject {
-  @Published package var connection = ConnectionStatus.disconnected
-  var onConnection: AnyCancellable?
-  var onSerialNumberUpdate: ((String) -> Void)?
-  package let peripheral: CBPeripheral
-  @Published var setupStepsRemaining = Set(GATT.Characteristics.allCases)
+final class EmberMug: NSObject {
+  @Published var connection = ConnectionStatus.disconnected
+  private var onConnection: AnyCancellable?
+  var onIdentityUpdate: ((LocalKnownBluetoothMug) -> Void)?
+  let peripheral: CBPeripheral
+  private let model: BluetoothMugModel
+  @Published var setupStepsRemaining = Set(EmberGATT.Characteristics.allCases)
 
   // Reading
   let activityCharacteristic = ActivityCharacteristic()
   let battery = BatteryCharacteristic()
-  let hasContentsCharacteristic = HasContentsCharacteristic()
+  let hasContentsCharacteristic: HasContentsCharacteristic
   let serial = SerialNumberCharacteristic()
   let tempCurrent = TemperatureCharacteristic()
 
@@ -26,9 +27,25 @@ package final class EmberMug: NSObject {
   let tempUnit = TemperatureUnitPreferenceCharacteristic()
   let writes = Writes()
 
-  package init(_ peripheral: CBPeripheral) {
+  init(_ peripheral: CBPeripheral, _ model: BluetoothMugModel.EmberModel) {
+    self.hasContentsCharacteristic = model.hasContentsCharacteristic
+    self.model = .ember(model)
     self.peripheral = peripheral
     super.init()
+
+    peripheral.delegate = self
+
+    onConnection = $connection
+      .filter { $0 == .connected }
+      .sink { [weak peripheral, weak self] _ in
+        guard let self else { return }
+        if setupStepsRemaining.isEmpty {
+          onReconnect()
+          return
+        }
+        Log.ember.info("\(self.debugShortIdentifier) onConnection request discoverServices")
+        peripheral?.discoverServices(nil)
+      }
   }
 }
 
@@ -43,7 +60,7 @@ extension EmberMug {
     sendNextQueuedWrite()
   }
 
-  func requestRead(_ characteristic: EmberMug.GATT.Characteristics) {
+  func requestRead(_ characteristic: EmberGATT.Characteristics) {
     guard let characteristic = self[ember: characteristic].characteristic else {
       Log.ember.error("\(self.debugShortIdentifier) readValue attempted before setup \(characteristic.debugDescription)")
       return
@@ -61,7 +78,7 @@ extension EmberMug {
 // MARK: - CBPeripheralDelegate
 
 extension EmberMug: CBPeripheralDelegate {
-  package func peripheral(
+  func peripheral(
     _ peripheral: CBPeripheral,
     didDiscoverServices error: (any Error)?
   ) {
@@ -78,7 +95,7 @@ extension EmberMug: CBPeripheralDelegate {
     peripheral.discoverCharacteristics(Array(setupStepsRemaining.map(\.id)), for: emberService)
   }
 
-  package func peripheral(
+  func peripheral(
     _ peripheral: CBPeripheral,
     didDiscoverCharacteristicsFor service: CBService,
     error: (any Error)?
@@ -101,7 +118,7 @@ extension EmberMug: CBPeripheralDelegate {
     }
   }
 
-  package func peripheral(
+  func peripheral(
     _ peripheral: CBPeripheral,
     didUpdateValueFor characteristic: CBCharacteristic,
     error: (any Error)?
@@ -121,9 +138,7 @@ extension EmberMug: CBPeripheralDelegate {
     do {
       let characteristic = self[ember: gatt]
       try characteristic.parse(update: data)
-      if let serial = serial.value {
-        onSerialNumberUpdate?(serial)
-      }
+      updateIdentityIfNeeded(gatt)
       setupStepsRemaining.remove(gatt)
       Log.ember.info("\(self.debugShortIdentifier) didUpdateValueFor: \(characteristic.debugDescription) \(data.bytes)")
     } catch {
@@ -131,7 +146,7 @@ extension EmberMug: CBPeripheralDelegate {
     }
   }
 
-  package func peripheral(
+  func peripheral(
     _ peripheral: CBPeripheral,
     didWriteValueFor characteristic: CBCharacteristic,
     error: (any Error)?
@@ -152,7 +167,7 @@ extension EmberMug: CBPeripheralDelegate {
 }
 
 extension EmberMug {
-  subscript(ember characteristic: GATT.Characteristics) -> any BluetoothCharacteristic {
+  subscript(ember characteristic: EmberGATT.Characteristics) -> any BluetoothCharacteristic {
     switch characteristic {
     case .tempCurrent: tempCurrent
     case .tempTarget: tempTarget
@@ -167,17 +182,17 @@ extension EmberMug {
   }
 
   class Writes {
-    @Published private(set) var awaitingResponse = Set<GATT.Characteristics>()
-    private var queue = OrderedDictionary<GATT.Characteristics, BluetoothMugCommand>()
+    @Published private(set) var awaitingResponse = Set<EmberGATT.Characteristics>()
+    private var queue = OrderedDictionary<EmberGATT.Characteristics, BluetoothMugCommand>()
     private let lock = NSLock()
 
-    func awaitResponse(_ characteristic: GATT.Characteristics) {
+    func awaitResponse(_ characteristic: EmberGATT.Characteristics) {
       lock.lock()
       defer { lock.unlock() }
       awaitingResponse.insert(characteristic)
     }
 
-    func removeAwaitedResponse(_ characteristic: GATT.Characteristics) {
+    func removeAwaitedResponse(_ characteristic: EmberGATT.Characteristics) {
       lock.lock()
       defer { lock.unlock() }
       awaitingResponse.remove(characteristic)
@@ -189,17 +204,36 @@ extension EmberMug {
       awaitingResponse.removeAll()
     }
 
-    func addToQueue(_ characteristic: GATT.Characteristics, _ command: BluetoothMugCommand) {
+    func addToQueue(_ characteristic: EmberGATT.Characteristics, _ command: BluetoothMugCommand) {
       lock.lock()
       defer { lock.unlock() }
       queue[characteristic] = command
     }
 
-    func popNextInQueue() -> (GATT.Characteristics, BluetoothMugCommand)? {
+    func popNextInQueue() -> (EmberGATT.Characteristics, BluetoothMugCommand)? {
       lock.lock()
       defer { lock.unlock() }
       if queue.isEmpty { return nil }
       return queue.removeFirst()
     }
+  }
+}
+
+private extension EmberMug {
+  func updateIdentityIfNeeded(_ updatedCharacteristic: EmberGATT.Characteristics) {
+    guard [.serialNumber, .led].contains(updatedCharacteristic),
+          let serial = serial.value,
+          let color = led?.color
+    else { return }
+    let identity = LocalKnownBluetoothMug(
+      localCBUUID: peripheral.identifier,
+      mug: KnownBluetoothMug(
+        color: color,
+        model: model,
+        name: name,
+        serial: serial
+      )
+    )
+    onIdentityUpdate?(identity)
   }
 }
