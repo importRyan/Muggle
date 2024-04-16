@@ -2,6 +2,30 @@
 import Common
 import Combine
 import ServiceManagement
+import SwiftUI
+
+struct LaunchAtLoginToggle: View {
+  @StateObject private var launchAtLogin = LaunchAtLoginViewModel()
+
+  var body: some View {
+    HStack {
+      Toggle(
+        "Start on boot",
+        isOn: .init(
+          get: { launchAtLogin.isLaunchingAtLogin },
+          set: { _ in launchAtLogin.toggle() }
+        )
+      )
+      if launchAtLogin.requiresSystemPreferencesAction {
+        Button("Open Preferences") { launchAtLogin.openPreferences() }
+          .buttonBorderShape(.capsule)
+          .buttonStyle(.borderedProminent)
+          .controlSize(.small)
+      }
+    }
+    .onAppear(perform: launchAtLogin.refresh)
+  }
+}
 
 @MainActor
 final class LaunchAtLoginViewModel: ObservableObject {
