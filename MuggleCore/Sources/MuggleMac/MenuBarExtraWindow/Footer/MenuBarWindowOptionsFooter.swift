@@ -7,13 +7,9 @@ struct MenuBarWindowOptionsFooter: View {
   var body: some View {
     HStack(spacing: 30) {
       #if os(macOS)
-      Button("Quit") {
-        NSApp.terminate(nil)
-      }
-      .opacity(isHovering ? 0.8 : 0)
-
-      Spacer()
-
+      QuitButton()
+        .opacity(isHovering ? 0.8 : 0)
+      OnboardingLaunchAtLoginToggle()
       OpenSettingsWindowButton()
       #endif
     }
