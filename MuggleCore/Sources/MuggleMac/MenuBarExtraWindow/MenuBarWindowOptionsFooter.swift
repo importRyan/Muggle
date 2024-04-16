@@ -3,7 +3,6 @@ import SwiftUI
 struct MenuBarWindowOptionsFooter: View {
 
   @State private var isHovering = false
-  @Environment(\.openWindow) private var openWindow
 
   var body: some View {
     HStack(spacing: 30) {
@@ -15,16 +14,7 @@ struct MenuBarWindowOptionsFooter: View {
 
       Spacer()
 
-      Button("Settings") {
-        // Workaround: MenuBarExtra LSUIElement-launched scenes need the app to be activated otherwise existing windows won't respond to makeKeyAndOrderFront and will be lost beneath the never-ending clutter of life
-        if let window = NSApp.windows.settingsWindow {
-          NSApp.activate()
-          window.orderFrontRegardless()
-          window.makeKey()
-          return
-        }
-        openWindow(id: SettingsWindow.id)
-      }
+      OpenSettingsWindowButton()
       #endif
     }
     .font(.callout)
@@ -38,11 +28,3 @@ struct MenuBarWindowOptionsFooter: View {
     .buttonStyle(.borderless)
   }
 }
-
-#if os(macOS)
-extension [NSWindow] {
-  var settingsWindow: NSWindow? {
-    filter { $0.identifier?.rawValue == SettingsWindow.id }.first
-  }
-}
-#endif
