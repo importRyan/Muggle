@@ -14,7 +14,7 @@ Given the macOS menu bar application, this repo is simple:
 V1.0
 - [x] Nordic integration tests
 - [ ] App icon inset
-- [ ] Add boot on login to footer during onboarding
+- [x] Add boot on login to footer during onboarding
 - [ ] Test Flight (privacy, XCC, solicit testers)
 
 V1.1
