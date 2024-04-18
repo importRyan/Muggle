@@ -15,7 +15,7 @@ V1.0
 - [x] Nordic integration tests
 - [x] App icon inset
 - [x] Add boot on login to footer during onboarding
-- [ ] Test Flight (privacy, XCC, solicit testers)
+- [x] Test Flight (privacy, XCC, solicit testers)
 
 V1.1
 - [ ] Vision Pro (as central)
