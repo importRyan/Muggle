@@ -16,6 +16,9 @@
       <FileRef
          location = "group:WhatToTest.en-US.txt">
       </FileRef>
+      <FileRef
+         location = "group:/Users/ryan/Developer/Muggle/TestFlight/Privacy.md">
+      </FileRef>
    </Group>
    <Group
       location = "group:ci_scripts"
