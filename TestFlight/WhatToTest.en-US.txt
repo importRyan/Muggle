@@ -1,0 +1,6 @@
+Ember mugs only connect to one computer at a time. You can run Ember's app at the same time as Muggle (on the same computer).
+
+Test:
+- Does Muggle report on your Ember mugs like Ember's own app does?
+
+Changes:
