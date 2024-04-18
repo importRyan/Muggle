@@ -15,7 +15,7 @@ struct AnimatedStarField<Stars: Shape>: View {
   var body: some View {
     ZStack {
       layer1
-        .animation(.linear(duration: 400).repeatForever(autoreverses: false)) {
+        .animation(.linear(duration: 600).repeatForever(autoreverses: false)) {
           $0.rotationEffect(.degrees(isTwinkling ? 0 : -360), anchor: .bottom)
         }
       layer2
@@ -23,7 +23,7 @@ struct AnimatedStarField<Stars: Shape>: View {
           $0.opacity(isTwinkling ? 1 : 0.2)
         }
       layer3
-        .animation(.linear(duration: 700).repeatForever(autoreverses: false)) {
+        .animation(.linear(duration: 1000).repeatForever(autoreverses: false)) {
           $0.rotationEffect(.degrees(isTwinkling ? 0 : -360))
         }
       layer4
