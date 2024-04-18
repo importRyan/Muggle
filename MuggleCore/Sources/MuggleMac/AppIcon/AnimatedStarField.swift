@@ -40,50 +40,13 @@ struct AnimatedStarField<Stars: Shape>: View {
 
 struct RandomStars: Shape, @unchecked Sendable {
 
-  static let muggleLogoClusters: [[CGFloat]] = [
-    [0.1, 0.1],
-    [0.1, 0.2],
-    [0.1, 0.3],
-    [0.1, 0.4],
-    [0.1, 0.5],
-    [0.1, 0.6],
-    [0.1, 0.7],
-    [0.1, 0.9],
-    [0.2, 0.1],
-    [0.2, 0.9],
-    [0.3, 0.1],
-    [0.4, 0.1],
-    [0.5, 0.1],
-    [0.6, 0.1],
-    [0.7, 0.1],
-    [0.8, 0.1],
-    [0.8, 0.2],
-    [0.8, 0.3],
-    [0.8, 0.4],
-    [0.8, 0.5],
-    [0.8, 0.6],
-    [0.8, 0.9],
-    [0.9, 0.1],
-    [0.9, 0.2],
-    [0.9, 0.3],
-    [0.9, 0.4],
-    [0.9, 0.5],
-    [0.9, 0.6],
-    [0.9, 0.7],
-    [0.9, 0.7],
-    [0.9, 0.8],
-    [0.9, 0.9],
-  ]
-
-  private let clusters: [[CGFloat]]
   private let minStarSizeMultiplier: Float
   private let maxStarSizeMultiplier: Float
   private let stars: Int
   private let randomizer: GKRandomSource
 
-  init(seed: UInt64 = 0, minStarSizeMultiplier: Float = 0.002, maxStarSizeMultiplier: Float = 0.006, stars: Int = 150, clusters: [[CGFloat]] = Self.muggleLogoClusters) {
+  init(seed: UInt64 = 0, minStarSizeMultiplier: Float = 0.002, maxStarSizeMultiplier: Float = 0.006, stars: Int = 200) {
     self.randomizer = GKLinearCongruentialRandomSource(seed: seed)
-    self.clusters = clusters
     self.stars = stars
     self.minStarSizeMultiplier = minStarSizeMultiplier
     self.maxStarSizeMultiplier = maxStarSizeMultiplier
@@ -93,23 +56,15 @@ struct RandomStars: Shape, @unchecked Sendable {
     var path = Path()
     let dimension = min(Float(rect.width), Float(rect.height))
     let starSizeRange = (dimension * minStarSizeMultiplier)...(dimension * maxStarSizeMultiplier)
-    let clustersCountFloat = Float(clusters.count)
-    let widthMultiplier = Float(rect.width / 5)
-    let widthConstant = widthMultiplier /  2
-    let heightMultiplier = Float(rect.height / 5)
-    let heightConstant = heightMultiplier / 2
 
     for _ in 0..<stars {
-      let centerIndex = Int(randomizer.nextUniform() * clustersCountFloat)
-      let centerPosition = clusters[centerIndex]
-      let centerX = Float(centerPosition[0] * rect.width)
-      let centerY = Float(centerPosition[1] * rect.height)
-
-      let randomX = randomizer.nextUniform() * widthMultiplier + centerX - widthConstant
-      let randomY = randomizer.nextUniform() * heightMultiplier + centerY - heightConstant
-
       let starSize = CGFloat(starSizeRange.lerp(randomizer.nextUniform()))
-      let starRect = CGRect(x: CGFloat(randomX), y: CGFloat(randomY), width: starSize, height: starSize)
+      let starRect = CGRect(
+        x: CGFloat(randomizer.nextUniform()) * rect.height,
+        y: CGFloat(randomizer.nextUniform()) * rect.width,
+        width: starSize,
+        height: starSize
+      )
       path.addEllipse(in: starRect)
     }
 

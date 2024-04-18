@@ -5,10 +5,8 @@ import SwiftUI
 #Preview {
   AppStoreIconRecipe(
     fields: CachedStarFields(size: 256.0, maxStarSizeMultiplier: 0.006), 
-    inset: 10
+    inset: 0
   )
-  .clipShape(.rect)
-  .padding()
   .background(.white)
 }
 
@@ -17,9 +15,9 @@ func renderMacOSIcons() async -> URL {
   let recipes: [AppStoreIconRecipe] = [
     .init(fields: CachedStarFields(size: 16.0), inset: 0),
     .init(fields: CachedStarFields(size: 32.0), inset: 0),
-    .init(fields: CachedStarFields(size: 128.0), inset: 8),
-    .init(fields: CachedStarFields(size: 256.0, maxStarSizeMultiplier: 0.006), inset: 14),
-    .init(fields: CachedStarFields(size: 512.0, maxStarSizeMultiplier: 0.004), inset: 28),
+    .init(fields: CachedStarFields(size: 128.0), inset: 0),
+    .init(fields: CachedStarFields(size: 256.0, maxStarSizeMultiplier: 0.006), inset: 10),
+    .init(fields: CachedStarFields(size: 512.0, maxStarSizeMultiplier: 0.004), inset: 20),
   ]
   let cacheDir = try! FileManager.default.url(
     for: .cachesDirectory,
@@ -37,6 +35,12 @@ fileprivate struct AppStoreIconRecipe: View {
   let fields: CachedStarFields
   let inset: CGFloat
 
+  var insetFields: CachedStarFields {
+    var insetFields = fields
+    insetFields.size -= inset
+    return insetFields
+  }
+
   @MainActor
   var rendered: [(filename: String, png: Data)] {
     [
@@ -46,21 +50,24 @@ fileprivate struct AppStoreIconRecipe: View {
   }
 
   var body: some View {
-    let shadowRadius = inset * 0.3
+    let shadowRadius = inset * 0.25
     let shadowOffsetX = shadowRadius * cos(.pi/4)
     let shadowOffsetY = shadowRadius * sin(.pi/4)
     AnimatedAppIcon(
-      border: RoundedRectangle(cornerRadius: fields.size * 0.15, style: .continuous),
-      fields: CachedStarFields(size: fields.size - inset, maxStarSizeMultiplier: 0.006)
+      border: RoundedRectangle(cornerRadius: insetFields.size * 0.15, style: .continuous),
+      fields: insetFields
     )
+    .frame(square: insetFields.size)
+    .background {
+      RoundedRectangle(cornerRadius: fields.size * 0.15, style: .continuous)
+        .foregroundStyle(.black.opacity(0.55))
+        .blur(radius: shadowRadius)
+        .offset(
+          x: shadowOffsetX,
+          y: shadowOffsetY
+        )
+    }
     .frame(square: fields.size)
-    .compositingGroup()
-    .shadow(
-      color: .black.opacity(0.5),
-      radius: shadowRadius,
-      x: shadowOffsetX,
-      y: shadowOffsetY
-    )
     .offset(
       x: -shadowOffsetX,
       y: -shadowOffsetY

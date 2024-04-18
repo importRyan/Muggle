@@ -5,7 +5,7 @@ struct CachedStarFields {
   let b: Path
   let c: Path
   let d: Path
-  let size: CGFloat
+  var size: CGFloat
 
   init(size: CGFloat, maxStarSizeMultiplier: Float = 0.008) {
     self.size = size

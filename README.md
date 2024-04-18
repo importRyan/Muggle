@@ -13,7 +13,7 @@ Given the macOS menu bar application, this repo is simple:
 ## To-dos
 V1.0
 - [x] Nordic integration tests
-- [ ] App icon inset
+- [x] App icon inset
 - [x] Add boot on login to footer during onboarding
 - [ ] Test Flight (privacy, XCC, solicit testers)
 
