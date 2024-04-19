@@ -1,5 +1,5 @@
-#if canImport(ServiceManagement)
 import Common
+import CommonUI
 import SwiftUI
 
 struct OnboardingLaunchAtLoginToggle: View {
@@ -39,4 +39,3 @@ struct OnboardingLaunchAtLoginToggle: View {
     }
   }
 }
-#endif

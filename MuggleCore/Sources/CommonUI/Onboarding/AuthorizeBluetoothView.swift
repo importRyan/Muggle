@@ -11,6 +11,7 @@ struct AuthorizeBluetoothView: View {
       Text("Grant Bluetooth permissions to find nearby Ember mugs")
         .multilineTextAlignment(.center)
 
+      // TODO: - VisionOS
       #if os(macOS)
       Button("Open Settings") {
         if let url = URL.settingsPrivacyBluetooth, NSWorkspace.shared.open(url) { return }
@@ -25,8 +26,10 @@ struct AuthorizeBluetoothView: View {
   }
 }
 
+#if os(macOS)
 extension URL {
   static let settingsPrivacy = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy")
   static let settingsPrivacyBluetooth = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Bluetooth")
   static let settingsSecurity = URL(string: "x-apple.systempreferences:com.apple.preference.security")
 }
+#endif

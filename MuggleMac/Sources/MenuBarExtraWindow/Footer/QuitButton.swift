@@ -1,4 +1,3 @@
-#if os(macOS)
 import SwiftUI
 
 struct QuitButton: View {
@@ -8,4 +7,3 @@ struct QuitButton: View {
     }
   }
 }
-#endif

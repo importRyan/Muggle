@@ -1,4 +1,3 @@
-#if os(visionOS)
 import Common
 import MuggleBluetooth
 import SwiftUI
@@ -18,4 +17,3 @@ extension VisionOSAppDelegate: UIApplicationDelegate {
     return true
   }
 }
-#endif

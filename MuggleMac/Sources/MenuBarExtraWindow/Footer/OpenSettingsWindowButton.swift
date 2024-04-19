@@ -1,6 +1,5 @@
 import SwiftUI
 
-#if os(macOS)
 struct OpenSettingsWindowButton: View {
   @Environment(\.openWindow) private var openWindow
 
@@ -25,4 +24,3 @@ extension [NSWindow] {
     filter { $0.identifier?.rawValue == SettingsWindow.id }.first
   }
 }
-#endif

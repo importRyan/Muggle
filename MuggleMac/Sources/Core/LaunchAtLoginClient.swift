@@ -1,4 +1,3 @@
-#if canImport(ServiceManagement)
 import Common
 import Combine
 import ServiceManagement
@@ -101,4 +100,3 @@ extension SMAppService.Status: CustomDebugStringConvertible {
     }
   }
 }
-#endif

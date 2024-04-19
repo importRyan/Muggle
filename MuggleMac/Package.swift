@@ -8,7 +8,6 @@ let package = Package(
     .library(name: "MuggleMac", targets: ["MuggleMac"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/apple/swift-collections", from: Version(1, 1, 0)),
     .package(path: "../MuggleCore")
   ],
   targets: [
@@ -16,6 +15,7 @@ let package = Package(
       name: "MuggleMac",
       dependencies: [
         .product(name: "Common", package: "MuggleCore"),
+        .product(name: "CommonUI", package: "MuggleCore"),
         .product(name: "MuggleBluetooth", package: "MuggleCore"),
       ],
       path: "Sources"

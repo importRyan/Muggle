@@ -1,4 +1,3 @@
-#if os(macOS)
 import MuggleBluetooth
 import SwiftUI
 
@@ -18,4 +17,3 @@ struct MenuBarExtraScene: Scene {
     .menuBarExtraStyle(.window)
   }
 }
-#endif

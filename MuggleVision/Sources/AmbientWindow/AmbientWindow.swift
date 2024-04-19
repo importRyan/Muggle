@@ -5,7 +5,7 @@ import SwiftUI
 
 #if DEBUG
 #Preview {
-  MenuBarWindow(
+  AmbientWindow(
     central: .mocked(
       knownPeripheralsStore: KnownPeripheralsStore.live(store: .ephemeral),
       configure: { central in
@@ -18,7 +18,7 @@ import SwiftUI
 }
 #endif
 
-struct MenuBarWindow: View {
+struct AmbientWindow: View {
   @ObservedObject var central: BluetoothCentral
   @Environment(\.isPresented) var isPresented
 
@@ -30,13 +30,9 @@ struct MenuBarWindow: View {
       )
       if [.poweredOn, .resetting, .poweredOff].contains(central.status) {
         ForEach(central.peripherals.elements, id: \.key) { _, mug in
-          BluetoothMugView(
-            mug: mug,
-            viewModel: .init(mug: mug)
-          )
+          ConnectedDeviceActivityView(viewModel: .init(mug: mug))
         }
       }
-      MenuBarWindowOptionsFooter()
     }
     .onChange(of: isPresented, initial: true) { _, _ in
       central.scanForEmberProducts()

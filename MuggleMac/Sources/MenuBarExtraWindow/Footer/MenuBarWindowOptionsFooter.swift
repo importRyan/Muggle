@@ -6,12 +6,10 @@ struct MenuBarWindowOptionsFooter: View {
 
   var body: some View {
     HStack(spacing: 30) {
-      #if os(macOS)
       QuitButton()
         .opacity(isHovering ? 0.8 : 0)
       OnboardingLaunchAtLoginToggle()
       OpenSettingsWindowButton()
-      #endif
     }
     .font(.callout)
     .foregroundStyle(isHovering ? .primary : .tertiary)

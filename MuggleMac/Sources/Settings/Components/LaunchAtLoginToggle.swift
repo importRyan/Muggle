@@ -1,4 +1,3 @@
-#if canImport(ServiceManagement)
 import SwiftUI
 
 struct LaunchAtLoginToggle: View {
@@ -30,4 +29,3 @@ struct LaunchAtLoginToggle: View {
     }
   }
 }
-#endif

@@ -1,4 +1,3 @@
-#if os(macOS)
 import Common
 import MuggleBluetooth
 import SwiftUI
@@ -23,4 +22,3 @@ extension MacAppDelegate: NSApplicationDelegate {
     false
   }
 }
-#endif

@@ -1,4 +1,3 @@
-#if os(visionOS)
 import MuggleBluetooth
 import SwiftUI
 
@@ -12,8 +11,8 @@ public struct VisionOSRootScene: Scene {
 
   public var body: some Scene {
     WindowGroup {
-      MenuBarWindow(central: central)
+      AmbientWindow(central: central)
     }
   }
 }
-#endif
+

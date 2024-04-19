@@ -1,4 +1,3 @@
-#if os(macOS)
 import MuggleBluetooth
 import SwiftUI
 
@@ -15,4 +14,3 @@ public struct MacRootScene: Scene {
     SettingsWindow(delegate: delegate)
   }
 }
-#endif

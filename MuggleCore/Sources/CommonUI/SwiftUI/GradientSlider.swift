@@ -1,3 +1,4 @@
+import Common
 import SwiftUI
 
 /// Apply track gradient using `.backgroundStyle`

@@ -6,7 +6,6 @@ import SwiftUI
 }
 #endif
 
-#if os(macOS)
 struct SettingsWindow: Scene {
   static let id = "settings"
 
@@ -21,7 +20,6 @@ struct SettingsWindow: Scene {
     }
   }
 }
-#endif
 
 private struct SettingsWindowContent: View {
 

@@ -1,11 +1,16 @@
 import Common
 import SwiftUI
 
-struct BluetoothCentralStatusHint: View {
-  let status: CBManagerState
-  let noPeripherals: Bool
+public struct BluetoothCentralStatusHint: View {
+  public let status: CBManagerState
+  public let noPeripherals: Bool
 
-  var body: some View {
+  public init(status: CBManagerState, noPeripherals: Bool) {
+    self.status = status
+    self.noPeripherals = noPeripherals
+  }
+
+  public var body: some View {
     switch status {
     case .poweredOn:
       if noPeripherals {

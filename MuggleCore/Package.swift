@@ -8,6 +8,7 @@ let package = Package(
   platforms: [.macOS(.v14), .visionOS(.v1)],
   products: [
     .library(name: "Common",targets: ["Common"]),
+    .library(name: "CommonUI",targets: ["CommonUI"]),
     .library(name: "EmberBluetooth",targets: ["EmberBluetooth"]),
     .library(name: "MuggleBluetooth",targets: ["MuggleBluetooth"]),
   ],
@@ -20,6 +21,12 @@ let package = Package(
       name: "Common",
       dependencies: [
         .product(name: "CoreBluetoothMock", package: "IOS-CoreBluetooth-Mock"),
+      ]
+    ),
+    .target(
+      name: "CommonUI",
+      dependencies: [
+        "Common",
       ]
     ),
     .target(
