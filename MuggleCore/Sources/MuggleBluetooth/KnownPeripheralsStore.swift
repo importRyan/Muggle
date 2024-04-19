@@ -3,11 +3,11 @@ import Foundation
 import OrderedCollections
 import SwiftUI
 
-package struct KnownPeripheralsStore {
-  package var peripherals: () -> [UUID: LocalKnownBluetoothMug]
-  package var updatePeripheral: (LocalKnownBluetoothMug) -> Void
+public struct KnownPeripheralsStore {
+  public var peripherals: () -> [UUID: LocalKnownBluetoothMug]
+  public var updatePeripheral: (LocalKnownBluetoothMug) -> Void
 
-  package init(
+  public init(
     peripherals: @escaping () -> [UUID : LocalKnownBluetoothMug],
     updatePeripheral: @escaping (LocalKnownBluetoothMug) -> Void
   ) {
@@ -16,7 +16,7 @@ package struct KnownPeripheralsStore {
   }
 }
 
-package extension KnownPeripheralsStore {
+public extension KnownPeripheralsStore {
   static func live(store: KeyValueStore) -> KnownPeripheralsStore {
     var cache: [UUID: LocalKnownBluetoothMug] = store.knownPeripherals
     return KnownPeripheralsStore(

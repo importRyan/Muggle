@@ -5,12 +5,12 @@ import PackageDescription
 let package = Package(
   name: "MuggleCore",
   defaultLocalization: "en",
-  platforms: [.macOS(.v14)],
+  platforms: [.macOS(.v14), .visionOS(.v1)],
   products: [
     .library(name: "Common",targets: ["Common"]),
+    .library(name: "CommonUI",targets: ["CommonUI"]),
     .library(name: "EmberBluetooth",targets: ["EmberBluetooth"]),
     .library(name: "MuggleBluetooth",targets: ["MuggleBluetooth"]),
-    .library(name: "MuggleMac",targets: ["MuggleMac"]),
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-collections", from: Version(1, 1, 0)),
@@ -21,6 +21,12 @@ let package = Package(
       name: "Common",
       dependencies: [
         .product(name: "CoreBluetoothMock", package: "IOS-CoreBluetooth-Mock"),
+      ]
+    ),
+    .target(
+      name: "CommonUI",
+      dependencies: [
+        "Common",
       ]
     ),
     .target(
@@ -42,9 +48,5 @@ let package = Package(
       name: "MuggleBluetoothTests",
       dependencies: ["MuggleBluetooth"]
     ),
-    .target(
-      name: "MuggleMac",
-      dependencies: ["Common", "MuggleBluetooth"]
-    )
   ]
 )

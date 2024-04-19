@@ -1,6 +1,6 @@
 import Foundation
 
-package extension URL {
+public extension URL {
   init?(email: String, subject: String, body: String) {
     let format: (String) -> String = { $0 }
     var components = URLComponents()

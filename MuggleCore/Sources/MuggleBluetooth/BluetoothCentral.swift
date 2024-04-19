@@ -4,24 +4,24 @@ import EmberBluetooth
 import Foundation
 import OrderedCollections
 
-package final class BluetoothCentral: NSObject, ObservableObject {
-  @Published package var peripherals: OrderedDictionary<UUID, BluetoothMug & BluetoothPeripheral> = [:]
-  @Published package var status = CBManagerState.unknown
-  @Published package var isScanning = false
+public final class BluetoothCentral: NSObject, ObservableObject {
+  @Published public var peripherals: OrderedDictionary<UUID, BluetoothMug & BluetoothPeripheral> = [:]
+  @Published public var status = CBManagerState.unknown
+  @Published public var isScanning = false
   private var central: CBCentralManager?
   private var isScanningUpdates: AnyCancellable?
   private var stopScanTimer: AnyCancellable?
   private var stopScanTimerExpiration: Date?
   private let known: KnownPeripheralsStore
 
-  package init(knownPeripheralsStore: KnownPeripheralsStore) {
+  public init(knownPeripheralsStore: KnownPeripheralsStore) {
     self.known = knownPeripheralsStore
     super.init()
   }
 
   #if DEBUG
   /// - Parameter configure: Call `CBMCentralManagerMock` methods to register devices and set authorization state.
-  package static func mocked(
+  public static func mocked(
     knownPeripheralsStore: KnownPeripheralsStore,
     configure: (BluetoothCentral) -> Void
   ) -> BluetoothCentral {
@@ -33,8 +33,8 @@ package final class BluetoothCentral: NSObject, ObservableObject {
   #endif
 }
 
-package extension BluetoothCentral {
-  
+public extension BluetoothCentral {
+
   func setup() {
     setup(forceMock: false)
   }
@@ -90,7 +90,7 @@ package extension BluetoothCentral {
 }
 
 extension BluetoothCentral: CBCentralManagerDelegate {
-  package func centralManagerDidUpdateState(_ central: CBCentralManager) {
+  public func centralManagerDidUpdateState(_ central: CBCentralManager) {
     Log.central.info("\(#function) \(central.state.debugDescription)")
     status = central.state
     if status == .poweredOn && peripherals.isEmpty {
@@ -106,7 +106,7 @@ extension BluetoothCentral: CBCentralManagerDelegate {
     }
   }
 
-  package func centralManager(
+  public func centralManager(
     _ central: CBCentralManager,
     didConnect peripheral: CBPeripheral
   ) {
@@ -118,7 +118,7 @@ extension BluetoothCentral: CBCentralManagerDelegate {
     peripherals[peripheral.identifier]?.connection = .connected
   }
 
-  package func centralManager(
+  public func centralManager(
     _ central: CBCentralManager,
     didDiscover peripheral: CBPeripheral,
     advertisementData: [String : Any],
@@ -141,7 +141,7 @@ extension BluetoothCentral: CBCentralManagerDelegate {
     }
   }
 
-  package func centralManager(
+  public func centralManager(
     _ central: CBCentralManager,
     didFailToConnect peripheral: CBPeripheral,
     error: (any Error)?
@@ -155,7 +155,7 @@ extension BluetoothCentral: CBCentralManagerDelegate {
     mug.connection = .disconnected
   }
 
-  package func centralManager(
+  public func centralManager(
     _ central: CBCentralManager,
     didDisconnectPeripheral peripheral: CBPeripheral,
     error: (any Error)?
@@ -173,7 +173,7 @@ extension BluetoothCentral: CBCentralManagerDelegate {
     central.connect(peripheral)
   }
 
-  package func centralManager(_ central: CBCentralManager, willRestoreState dict: [String : Any]) {
+  public func centralManager(_ central: CBCentralManager, willRestoreState dict: [String : Any]) {
     guard let restorablePeripherals = dict[CBCentralManagerRestoredStatePeripheralsKey] as? [CBPeripheral] else { return }
     Log.central.info("willRestoreState for: \(restorablePeripherals.map(\.identifier))")
     for peripheral in restorablePeripherals {

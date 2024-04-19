@@ -1,7 +1,8 @@
-import MuggleMac
 import SwiftUI
 
 #if os(macOS)
+import MuggleMac
+
 @main
 struct MuggleMacApp: App {
   @NSApplicationDelegateAdaptor(MacAppDelegate.self) var delegate
@@ -9,7 +10,10 @@ struct MuggleMacApp: App {
     MacRootScene(delegate: delegate)
   }
 }
+
 #elseif os(visionOS)
+import MuggleVision
+
 @main
 struct MuggleVisionOSApp: App {
   @UIApplicationDelegateAdaptor(VisionOSAppDelegate.self) var delegate

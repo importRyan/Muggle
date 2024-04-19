@@ -1,7 +1,7 @@
 import Common
 import Foundation
 
-package class EmberMug2SpecDelegate {
+public class EmberMug2SpecDelegate {
   // Reading
   package var activity = EmberMugActivity.empty
   package var battery = BatteryState(percent: 1, isCharging: true)
@@ -17,12 +17,12 @@ package class EmberMug2SpecDelegate {
   package var tempTarget = Double(0)
   package var tempUnit = UnitTemperature.celsius
 
-  package init() {}
+  public init() {}
 }
 
 extension EmberMug2SpecDelegate: CBMPeripheralSpecDelegate {
 
-  package func peripheral(
+  public func peripheral(
     _ peripheral: CBMPeripheralSpec,
     didReceiveReadRequestFor characteristic: CBMCharacteristicMock
   ) -> Result<Data, any Error> {
@@ -59,7 +59,7 @@ extension EmberMug2SpecDelegate: CBMPeripheralSpecDelegate {
     return .success(data)
   }
 
-  package func peripheral(
+  public func peripheral(
     _ peripheral: CBMPeripheralSpec,
     didReceiveWriteRequestFor characteristic: CBMCharacteristicMock,
     data: Data

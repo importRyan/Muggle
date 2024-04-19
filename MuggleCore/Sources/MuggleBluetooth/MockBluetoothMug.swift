@@ -3,11 +3,11 @@ import EmberBluetooth
 import Foundation
 
 #if DEBUG
-package struct MockBluetoothMug {
+public struct MockBluetoothMug {
 
-  package let delegate: () -> CBMPeripheralSpecDelegate
+  public let delegate: () -> CBMPeripheralSpecDelegate
 
-  package func connected() -> BluetoothMug & BluetoothPeripheral {
+  public func connected() -> BluetoothMug & BluetoothPeripheral {
     let mug = BluetoothMugModel.EmberModel.mug.build(
       CBMPeripheralPreview(
         .connected(delegate: delegate()),
@@ -18,7 +18,7 @@ package struct MockBluetoothMug {
     return mug
   }
 
-  package init(delegate: @escaping () -> CBMPeripheralSpecDelegate = { EmberMug2SpecDelegate() }) {
+  public init(delegate: @escaping () -> CBMPeripheralSpecDelegate = { EmberMug2SpecDelegate() }) {
     self.delegate = delegate
   }
 }

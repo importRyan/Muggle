@@ -30,45 +30,45 @@
 
 @_exported import CoreBluetoothMock
 
-package typealias CBPeer                          = CBMPeer
-package typealias CBAttribute                     = CBMAttribute
-package typealias CBCentralManagerFactory         = CBMCentralManagerFactory
-package typealias CBUUID                          = CBMUUID
-package typealias CBError                         = CBMError
-package typealias CBATTError                      = CBMATTError
-package typealias CBManagerState                  = CBMManagerState
-package typealias CBPeripheralState               = CBMPeripheralState
-package typealias CBCentralManager                = CBMCentralManager
-package typealias CBCentralManagerDelegate        = CBMCentralManagerDelegate
-package typealias CBPeripheral                    = CBMPeripheral
-package typealias CBPeripheralDelegate            = CBMPeripheralDelegate
-package typealias CBService                       = CBMService
-package typealias CBCharacteristic                = CBMCharacteristic
-package typealias CBCharacteristicWriteType       = CBMCharacteristicWriteType
-package typealias CBCharacteristicProperties      = CBMCharacteristicProperties
-package typealias CBDescriptor                    = CBMDescriptor
-package typealias CBConnectionEvent               = CBMConnectionEvent
-package typealias CBConnectionEventMatchingOption = CBMConnectionEventMatchingOption
+public typealias CBPeer                          = CBMPeer
+public typealias CBAttribute                     = CBMAttribute
+public typealias CBCentralManagerFactory         = CBMCentralManagerFactory
+public typealias CBUUID                          = CBMUUID
+public typealias CBError                         = CBMError
+public typealias CBATTError                      = CBMATTError
+public typealias CBManagerState                  = CBMManagerState
+public typealias CBPeripheralState               = CBMPeripheralState
+public typealias CBCentralManager                = CBMCentralManager
+public typealias CBCentralManagerDelegate        = CBMCentralManagerDelegate
+public typealias CBPeripheral                    = CBMPeripheral
+public typealias CBPeripheralDelegate            = CBMPeripheralDelegate
+public typealias CBService                       = CBMService
+public typealias CBCharacteristic                = CBMCharacteristic
+public typealias CBCharacteristicWriteType       = CBMCharacteristicWriteType
+public typealias CBCharacteristicProperties      = CBMCharacteristicProperties
+public typealias CBDescriptor                    = CBMDescriptor
+public typealias CBConnectionEvent               = CBMConnectionEvent
+public typealias CBConnectionEventMatchingOption = CBMConnectionEventMatchingOption
 
-package let CBCentralManagerScanOptionAllowDuplicatesKey       = CBMCentralManagerScanOptionAllowDuplicatesKey
-package let CBCentralManagerOptionShowPowerAlertKey            = CBMCentralManagerOptionShowPowerAlertKey
-package let CBCentralManagerOptionRestoreIdentifierKey         = CBMCentralManagerOptionRestoreIdentifierKey
-package let CBCentralManagerScanOptionSolicitedServiceUUIDsKey = CBMCentralManagerScanOptionSolicitedServiceUUIDsKey
-package let CBConnectPeripheralOptionStartDelayKey             = CBMConnectPeripheralOptionStartDelayKey
+public let CBCentralManagerScanOptionAllowDuplicatesKey       = CBMCentralManagerScanOptionAllowDuplicatesKey
+public let CBCentralManagerOptionShowPowerAlertKey            = CBMCentralManagerOptionShowPowerAlertKey
+public let CBCentralManagerOptionRestoreIdentifierKey         = CBMCentralManagerOptionRestoreIdentifierKey
+public let CBCentralManagerScanOptionSolicitedServiceUUIDsKey = CBMCentralManagerScanOptionSolicitedServiceUUIDsKey
+public let CBConnectPeripheralOptionStartDelayKey             = CBMConnectPeripheralOptionStartDelayKey
 
-package let CBCentralManagerRestoredStatePeripheralsKey        = CBMCentralManagerRestoredStatePeripheralsKey
-package let CBCentralManagerRestoredStateScanServicesKey       = CBMCentralManagerRestoredStateScanServicesKey
-package let CBCentralManagerRestoredStateScanOptionsKey        = CBMCentralManagerRestoredStateScanOptionsKey
+public let CBCentralManagerRestoredStatePeripheralsKey        = CBMCentralManagerRestoredStatePeripheralsKey
+public let CBCentralManagerRestoredStateScanServicesKey       = CBMCentralManagerRestoredStateScanServicesKey
+public let CBCentralManagerRestoredStateScanOptionsKey        = CBMCentralManagerRestoredStateScanOptionsKey
 
-package let CBAdvertisementDataLocalNameKey                    = CBMAdvertisementDataLocalNameKey
-package let CBAdvertisementDataServiceUUIDsKey                 = CBMAdvertisementDataServiceUUIDsKey
-package let CBAdvertisementDataIsConnectable                   = CBMAdvertisementDataIsConnectable
-package let CBAdvertisementDataTxPowerLevelKey                 = CBMAdvertisementDataTxPowerLevelKey
-package let CBAdvertisementDataServiceDataKey                  = CBMAdvertisementDataServiceDataKey
-package let CBAdvertisementDataManufacturerDataKey             = CBMAdvertisementDataManufacturerDataKey
-package let CBAdvertisementDataOverflowServiceUUIDsKey         = CBMAdvertisementDataOverflowServiceUUIDsKey
-package let CBAdvertisementDataSolicitedServiceUUIDsKey        = CBMAdvertisementDataSolicitedServiceUUIDsKey
+public let CBAdvertisementDataLocalNameKey                    = CBMAdvertisementDataLocalNameKey
+public let CBAdvertisementDataServiceUUIDsKey                 = CBMAdvertisementDataServiceUUIDsKey
+public let CBAdvertisementDataIsConnectable                   = CBMAdvertisementDataIsConnectable
+public let CBAdvertisementDataTxPowerLevelKey                 = CBMAdvertisementDataTxPowerLevelKey
+public let CBAdvertisementDataServiceDataKey                  = CBMAdvertisementDataServiceDataKey
+public let CBAdvertisementDataManufacturerDataKey             = CBMAdvertisementDataManufacturerDataKey
+public let CBAdvertisementDataOverflowServiceUUIDsKey         = CBMAdvertisementDataOverflowServiceUUIDsKey
+public let CBAdvertisementDataSolicitedServiceUUIDsKey        = CBMAdvertisementDataSolicitedServiceUUIDsKey
 
-package let CBConnectPeripheralOptionNotifyOnConnectionKey     = CBMConnectPeripheralOptionNotifyOnConnectionKey
-package let CBConnectPeripheralOptionNotifyOnDisconnectionKey  = CBMConnectPeripheralOptionNotifyOnDisconnectionKey
-package let CBConnectPeripheralOptionNotifyOnNotificationKey   = CBMConnectPeripheralOptionNotifyOnNotificationKey
+public let CBConnectPeripheralOptionNotifyOnConnectionKey     = CBMConnectPeripheralOptionNotifyOnConnectionKey
+public let CBConnectPeripheralOptionNotifyOnDisconnectionKey  = CBMConnectPeripheralOptionNotifyOnDisconnectionKey
+public let CBConnectPeripheralOptionNotifyOnNotificationKey   = CBMConnectPeripheralOptionNotifyOnNotificationKey

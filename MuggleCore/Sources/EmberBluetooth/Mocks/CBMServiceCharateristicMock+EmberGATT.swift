@@ -1,7 +1,7 @@
 import Common
 import Foundation
 
-extension CBMServiceMock {
+public extension CBMServiceMock {
   static let ember = CBMServiceMock(
     type: .ember.service,
     primary: true,

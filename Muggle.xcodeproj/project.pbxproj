@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		9476E0742BBA0D68001CD3D9 /* MuggleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9476E0732BBA0D68001CD3D9 /* MuggleApp.swift */; };
 		9476E0782BBA0D69001CD3D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9476E0772BBA0D69001CD3D9 /* Assets.xcassets */; };
-		948B40542BBA1A510039EFB8 /* MuggleMac in Frameworks */ = {isa = PBXBuildFile; productRef = 948B40532BBA1A510039EFB8 /* MuggleMac */; };
+		948B40542BBA1A510039EFB8 /* MuggleMac in Frameworks */ = {isa = PBXBuildFile; platformFilters = (macos, ); productRef = 948B40532BBA1A510039EFB8 /* MuggleMac */; };
+		94CFF5E52BD2D83D00D0482E /* MuggleVision in Frameworks */ = {isa = PBXBuildFile; platformFilters = (xros, ); productRef = 94CFF5E42BD2D83D00D0482E /* MuggleVision */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				948B40542BBA1A510039EFB8 /* MuggleMac in Frameworks */,
+				94CFF5E52BD2D83D00D0482E /* MuggleVision in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,6 +87,7 @@
 			name = Muggle;
 			packageProductDependencies = (
 				948B40532BBA1A510039EFB8 /* MuggleMac */,
+				94CFF5E42BD2D83D00D0482E /* MuggleVision */,
 			);
 			productName = Muggle;
 			productReference = 9476E0702BBA0D68001CD3D9 /* Muggle.app */;
@@ -363,6 +366,10 @@
 		948B40532BBA1A510039EFB8 /* MuggleMac */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MuggleMac;
+		};
+		94CFF5E42BD2D83D00D0482E /* MuggleVision */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MuggleVision;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

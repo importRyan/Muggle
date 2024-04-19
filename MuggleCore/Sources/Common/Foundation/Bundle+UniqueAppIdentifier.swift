@@ -1,5 +1,5 @@
 import Foundation
 
-package extension Bundle {
+public extension Bundle {
   var uniqueAppIdentifier: String { bundleIdentifier ?? "com.roastingapps.muggle" }
 }

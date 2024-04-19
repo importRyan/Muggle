@@ -1,8 +1,8 @@
-package enum ConnectionStatus: String {
+public enum ConnectionStatus: String {
   case connected
   case connecting
   case disconnected
 
-  package var isConnected: Bool { self == .connected }
-  package var isNotConnected: Bool { self != .connected }
+  public var isConnected: Bool { self == .connected }
+  public var isNotConnected: Bool { self != .connected }
 }

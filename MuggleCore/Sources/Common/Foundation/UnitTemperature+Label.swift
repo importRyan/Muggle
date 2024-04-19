@@ -1,6 +1,6 @@
 import Foundation
 
-package extension UnitTemperature {
+public extension UnitTemperature {
   var label: String {
     switch self {
     case .celsius: "℃"
