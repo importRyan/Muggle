@@ -14,26 +14,24 @@ Other Ember products may work. Before changing the target temperature, check wit
 - `Common` general utilities and the `BluetoothMug` protocol to keep UI product agnostic
 
 ## To-dos
-V1.0
-- [x] Nordic integration tests
-- [x] App icon inset
-- [x] Add boot on login to footer during onboarding
-- [x] Test Flight (privacy, XCC, solicit testers)
-
 V1.1
-- [ ] Vision Pro (as central)
-- [ ] Sort eager Settings button first responder highlighting if opened while scanning
+- [ ] Bright/fix icon
+- [ ] macOS: Sort eager Settings button first responder highlighting if opened while scanning
 - [ ] Confirm Travel mug support (HasContentsCharacteristic)
 
 V1.2
-- [ ] Vision Pro (as shared client)
+- [ ] Brightness and color characteristic editing
+- [ ] Add color to cloud-syncing
+- [ ] Reduce scanning eagerness to save a little laptop battery
 
 V1.3
-- [ ] Brightness and color characteristics editing
-- [ ] Add color to cloud-syncing
+- [ ] Experiment: predict cooldown time, battery life, charge time 
+- [ ] Experiment: eliminate Ember's low volume overheating
+- [ ] Experiment: reduce Ember's' battery consumption during cooldown phase
 
 V1.4
-- [ ] Use cloud-syncing to skip or trigger scanning (to save battery on laptops) / add this as an explicit preference
+- [ ] visionOS: as central
+- [ ] macOS/visionOS: "remote" central
 
 V1.5
 - [ ] Non-Ember products
