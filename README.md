@@ -1,14 +1,17 @@
 #  Muggle
 
-Muggle is an open source, privacy-friendly alternative to apps by Bluetooth smart mug manufacturers. 
+Muggle is a macOS menu bar app for Bluetooth smart mugs. Unlike OEM apps, your identity and activities aren't collected. [Test Flight](https://testflight.apple.com/join/gWY84Gm8)
 
-Currently this macOS menu bar app supports the Ember Mug 2. Other Ember products may work — but you should confirm what the maximum temperature Ember's own app allows for your mug (this app limits the heat command to 63 celsius). You can use Ember's app at the same time as Muggle.
+### Supported Mugs
+- Ember Mug 2
 
-Given the macOS menu bar application, this repo is simple:
-- `MuggleMac` holds the UI (SwiftUI MenuBarExtra) against a generic `BluetoothMug`
-- `MuggleBluetooth` holds the CBCentralManager (currently detects only Ember products)
-- `EmberBluetooth` holds the read/write CBPeripheral methods and Nordic mocks for Ember products
-- `Common` holds general utilities and the `BluetoothMug` and other Nordic mocking related contracts
+Other Ember products may work. Before changing the target temperature, check with Ember's app that your maximum temperature is 63C/145F. You can use Ember's app at the same time as Muggle.
+
+### Repo
+- `MuggleMac` SwiftUI MenuBarExtra
+- `MuggleBluetooth` CBCentralManager
+- `EmberBluetooth` CBPeripheral and Nordic mocks for Ember products
+- `Common` general utilities and the `BluetoothMug` protocol to keep UI product agnostic
 
 ## To-dos
 V1.0
