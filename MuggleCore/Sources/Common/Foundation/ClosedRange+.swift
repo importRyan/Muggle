@@ -1,6 +1,6 @@
 import Foundation
 
-package extension ClosedRange {
+public extension ClosedRange {
   func percentage(_ value: Bound) -> Bound where Bound: FloatingPoint {
     (value - lowerBound) / (upperBound - lowerBound)
   }

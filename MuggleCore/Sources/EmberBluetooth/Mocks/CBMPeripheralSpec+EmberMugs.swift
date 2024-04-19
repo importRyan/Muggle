@@ -1,7 +1,7 @@
 import Common
 import Foundation
 
-package extension CBMPeripheralSpec {
+public extension CBMPeripheralSpec {
   static func advertising(
     id: UUID = UUID(uuidString: "11111111-1111-1111-1111-111111111111")!,
     proximity: CBMProximity = .immediate

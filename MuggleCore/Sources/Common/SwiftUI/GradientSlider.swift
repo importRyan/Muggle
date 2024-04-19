@@ -1,9 +1,9 @@
 import SwiftUI
 
 /// Apply track gradient using `.backgroundStyle`
-package struct GradientSlider<Label: View>: View {
+public struct GradientSlider<Label: View>: View {
 
-  package init(value: Binding<Double>, range: ClosedRange<Double>, interiorLabel: Label, onEditingEnded: @escaping () -> Void) {
+  public init(value: Binding<Double>, range: ClosedRange<Double>, interiorLabel: Label, onEditingEnded: @escaping () -> Void) {
     self.value = value
     self.range = range
     self.interiorLabel = interiorLabel
@@ -16,7 +16,7 @@ package struct GradientSlider<Label: View>: View {
   private let onEditingEnded: () -> Void
   @Environment(\.controlSize.points) private var size
 
-  package var body: some View {
+  public var body: some View {
     Component(
       value: value,
       range: range,

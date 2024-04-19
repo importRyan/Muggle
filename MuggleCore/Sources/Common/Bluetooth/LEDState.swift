@@ -1,17 +1,17 @@
 import SwiftUI
 
-package struct LEDState: Equatable {
-  package var color: Color
-  package var brightness: Double
+public struct LEDState: Equatable {
+  public var color: Color
+  public var brightness: Double
 
-  package init(color: Color, brightness: Double) {
+  public init(color: Color, brightness: Double) {
     self.color = color
     self.brightness = brightness
   }
 }
 
 extension LEDState: CustomDebugStringConvertible {
-  package var debugDescription: String {
+  public var debugDescription: String {
     "\(Self.self) \(color.description) brightness: \(brightness.formatted(.number.precision(.fractionLength(2))))"
   }
 }

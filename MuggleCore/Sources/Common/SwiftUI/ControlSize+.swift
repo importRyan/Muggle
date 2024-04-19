@@ -1,6 +1,6 @@
 import SwiftUI
 
-package extension ControlSize {
+public extension ControlSize {
   var points: CGFloat {
     switch self {
     case .mini: return 18

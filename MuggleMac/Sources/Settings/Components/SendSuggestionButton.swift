@@ -1,3 +1,4 @@
+import Common
 import SwiftUI
 
 struct SendSuggestionButton: View {

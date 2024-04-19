@@ -1,5 +1,5 @@
 import SwiftUI
 
-package extension Animation {
+public extension Animation {
   var fast: Animation { speed(3) }
 }

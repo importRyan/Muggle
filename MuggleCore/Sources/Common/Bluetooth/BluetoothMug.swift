@@ -3,7 +3,7 @@ import CoreBluetoothMock
 import Foundation
 import struct SwiftUI.Color
 
-package protocol BluetoothPeripheral: AnyObject {
+public protocol BluetoothPeripheral: AnyObject {
   var connection: ConnectionStatus { get set }
   var peripheral: CBPeripheral { get }
   var serialNumber: String? { get }
@@ -16,7 +16,7 @@ package protocol BluetoothPeripheral: AnyObject {
   )
 }
 
-package protocol BluetoothMug: AnyObject {
+public protocol BluetoothMug: AnyObject {
   func send(_ command: BluetoothMugCommand)
 
   var activity: MugActivity? { get }
@@ -53,7 +53,7 @@ extension BluetoothMug {
   }
 }
 
-package enum MugActivity {
+public enum MugActivity {
   case adjustingHeater
   case cooling
   case filling
@@ -61,7 +61,7 @@ package enum MugActivity {
   case holding
   case standby
 
-  var name: String {
+  public var name: String {
     switch self {
     case .adjustingHeater: "Adjusting Heating Element"
     case .cooling: "Cooling"
@@ -73,26 +73,26 @@ package enum MugActivity {
   }
 }
 
-package struct BatteryState: CustomDebugStringConvertible {
-  package var percent: Double
-  package var isCharging: Bool
+public struct BatteryState: CustomDebugStringConvertible {
+  public var percent: Double
+  public var isCharging: Bool
 
-  package init(percent: Double, isCharging: Bool) {
+  public init(percent: Double, isCharging: Bool) {
     self.percent = percent
     self.isCharging = isCharging
   }
 
-  package var debugDescription: String {
+  public var debugDescription: String {
     percent.formatted(.percent).appending(isCharging ? " charging" : " not charging")
   }
 }
 
-package enum BluetoothMugCommand: Equatable, CustomDebugStringConvertible {
+public enum BluetoothMugCommand: Equatable, CustomDebugStringConvertible {
   case led(LEDState)
   case targetTemperature(HeaterState)
   case unit(UnitTemperature)
 
-  package var debugDescription: String {
+  public var debugDescription: String {
     switch self {
     case .led(let newValue):
       "led: \(newValue.debugDescription)"
@@ -104,18 +104,18 @@ package enum BluetoothMugCommand: Equatable, CustomDebugStringConvertible {
   }
 }
 
-package enum HeaterState: Equatable {
+public enum HeaterState: Equatable {
   case off
   case celsius(Double)
 
-  package var value: Double? {
+  public var value: Double? {
     switch self {
     case .off: nil
     case .celsius(let value): value
     }
   }
 
-  package func formatted(unit: UnitTemperature) -> String {
+  public func formatted(unit: UnitTemperature) -> String {
     switch self {
     case .off: 
       "Off"
@@ -127,7 +127,7 @@ package enum HeaterState: Equatable {
     }
   }
 
-  package init(deviceLowerLimit: Double, currentValue: Double?) {
+  public init(deviceLowerLimit: Double, currentValue: Double?) {
     guard let currentValue, currentValue >= deviceLowerLimit else {
       self = .off
       return
@@ -138,45 +138,45 @@ package enum HeaterState: Equatable {
 
 
 extension HeaterState: CustomDebugStringConvertible {
-  package var debugDescription: String { formatted(unit: .celsius) }
+  public var debugDescription: String { formatted(unit: .celsius) }
 }
 
-package struct LocalUnit<T: Equatable> {
-  package var temp: T
-  package var unit: UnitTemperature
+public struct LocalUnit<T: Equatable> {
+  public var temp: T
+  public var unit: UnitTemperature
 
-  package init(temp: T, unit: UnitTemperature) {
+  public init(temp: T, unit: UnitTemperature) {
     self.temp = temp
     self.unit = unit
   }
 }
-package extension LocalUnit where T == HeaterState {
+public extension LocalUnit where T == HeaterState {
   var formatted: String { temp.formatted(unit: unit) }
 }
 
-package struct TemperatureState: Equatable {
-  package let celsius: Double
-  package let unit: UnitTemperature
+public struct TemperatureState: Equatable {
+  public let celsius: Double
+  public let unit: UnitTemperature
 
-  package init(celsius: Double, unit: UnitTemperature) {
+  public init(celsius: Double, unit: UnitTemperature) {
     self.celsius = celsius
     self.unit = unit
   }
 }
 
-package struct AllTemperatureState: Equatable {
-  package let currentCelsius: Double
-  package let target: HeaterState
-  package let unit: UnitTemperature
+public struct AllTemperatureState: Equatable {
+  public let currentCelsius: Double
+  public let target: HeaterState
+  public let unit: UnitTemperature
 
-  package init(currentCelsius: Double, target: HeaterState, unit: UnitTemperature) {
+  public init(currentCelsius: Double, target: HeaterState, unit: UnitTemperature) {
     self.currentCelsius = currentCelsius
     self.target = target
     self.unit = unit
   }
 }
 
-package extension AllTemperatureState {
+public extension AllTemperatureState {
   var isAtIdealTemperature: Bool {
     currentCelsius.rounded() == target.value?.rounded()
   }
@@ -193,7 +193,7 @@ package extension AllTemperatureState {
   }
 }
 
-package extension TemperatureState {
+public extension TemperatureState {
   var formatted: String {
     Measurement<UnitTemperature>
       .celsius(celsius)

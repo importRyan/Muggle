@@ -5,6 +5,12 @@
       location = "group:README.md">
    </FileRef>
    <FileRef
+      location = "group:MuggleMac">
+   </FileRef>
+   <FileRef
+      location = "group:MuggleVision">
+   </FileRef>
+   <FileRef
       location = "group:MuggleCore">
    </FileRef>
    <FileRef

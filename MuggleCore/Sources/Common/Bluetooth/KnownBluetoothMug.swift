@@ -1,16 +1,16 @@
 import SwiftUI
 
-package struct KnownBluetoothMug: Codable {
-  package let color: RGBColor?
-  package let model: BluetoothMugModel
-  package let name: String
-  package let serial: String
+public struct KnownBluetoothMug: Codable {
+  public let color: RGBColor?
+  public let model: BluetoothMugModel
+  public let name: String
+  public let serial: String
 
-  package struct RGBColor {
-    package let color: Color
+  public struct RGBColor {
+    public let color: Color
   }
 
-  package init(color: Color?, model: BluetoothMugModel, name: String, serial: String) {
+  public init(color: Color?, model: BluetoothMugModel, name: String, serial: String) {
     self.color = color.map(RGBColor.init)
     self.model = model
     self.name = name
@@ -18,19 +18,19 @@ package struct KnownBluetoothMug: Codable {
   }
 }
 
-package struct LocalKnownBluetoothMug: Codable, Identifiable {
-  package var id: UUID { localCBUUID }
-  package var localCBUUID: UUID
-  package var mug: KnownBluetoothMug
+public struct LocalKnownBluetoothMug: Codable, Identifiable {
+  public var id: UUID { localCBUUID }
+  public var localCBUUID: UUID
+  public var mug: KnownBluetoothMug
 
-  package init(localCBUUID: UUID, mug: KnownBluetoothMug) {
+  public init(localCBUUID: UUID, mug: KnownBluetoothMug) {
     self.localCBUUID = localCBUUID
     self.mug = mug
   }
 }
 
 extension KnownBluetoothMug.RGBColor: Codable {
-  package init(from decoder: any Decoder) throws {
+  public init(from decoder: any Decoder) throws {
     let container = try decoder.singleValueContainer()
     let bits = try container.decode([UInt8].self)
     guard bits.count == 3 else {
@@ -42,7 +42,7 @@ extension KnownBluetoothMug.RGBColor: Codable {
     self.color = .init(red: floats[0], green: floats[1], blue: floats[2])
   }
 
-  package func encode(to encoder: any Encoder) throws {
+  public func encode(to encoder: any Encoder) throws {
     var container = encoder.singleValueContainer()
     try container.encode(color.justRGB())
   }

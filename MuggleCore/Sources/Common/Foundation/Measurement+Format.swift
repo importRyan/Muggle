@@ -1,6 +1,6 @@
 import Foundation
 
-package extension Measurement<UnitTemperature> {
+public extension Measurement<UnitTemperature> {
   static func celsius(_ value: Double) -> Self {
     Self.init(value: value, unit: .celsius)
   }

@@ -1,6 +1,6 @@
 import SwiftUI
 
-package extension TextAlignment {
+public extension TextAlignment {
   var horizontal: HorizontalAlignment {
     switch self {
     case .leading: .leading
