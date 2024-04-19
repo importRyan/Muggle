@@ -2,6 +2,9 @@
 
 Muggle is a macOS menu bar app for Bluetooth smart mugs. Unlike OEM apps, your identity and activities aren't collected. [Test Flight](https://testflight.apple.com/join/gWY84Gm8)
 
+<img width="234" alt="Demo" src="https://github.com/importRyan/Muggle/assets/78187398/cf0f3549-3bd9-413b-b7ab-205a93f360c4">
+
+
 ### Supported Mugs
 - Ember Mug 2
 
