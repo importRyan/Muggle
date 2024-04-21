@@ -21,7 +21,7 @@ V1.1
 
 V1.2
 - [x] Brightness and color characteristic editing
-- [ ] Add color to cloud-syncing
+- [x] Add color to cloud-syncing
 - [ ] Reduce scanning eagerness to save a little laptop battery
 
 V1.3

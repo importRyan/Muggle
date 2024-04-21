@@ -64,3 +64,29 @@ private extension CGColor {
 private let esrgb = CGColorSpace(name: CGColorSpace.extendedSRGB)!
 private let srgb = CGColorSpace(name: CGColorSpace.extendedSRGB)!
 #endif
+
+extension LEDState: Codable {
+  private enum CodingKeys: String, CodingKey {
+    case rgb
+    case brightness
+  }
+
+  public func encode(to encoder: any Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encode(brightness, forKey: .brightness)
+    try container.encode(color.justRGB(), forKey: .rgb)
+  }
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    self.brightness = try container.decode(Double.self, forKey: .brightness)
+    let bits = try container.decode([UInt8].self, forKey: .rgb)
+    guard bits.count == 3 else {
+      self.color = .black
+      Log.app.error("\(Self.self) Unexpected Vector Length \(bits)")
+      return
+    }
+    let floats = bits.map { Double($0) / 255 }
+    self.color = .init(red: floats[0], green: floats[1], blue: floats[2])
+  }
+}
