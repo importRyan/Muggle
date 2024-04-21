@@ -20,7 +20,7 @@ V1.1
 - [ ] Confirm Travel mug support (HasContentsCharacteristic)
 
 V1.2
-- [ ] Brightness and color characteristic editing
+- [x] Brightness and color characteristic editing
 - [ ] Add color to cloud-syncing
 - [ ] Reduce scanning eagerness to save a little laptop battery
 
