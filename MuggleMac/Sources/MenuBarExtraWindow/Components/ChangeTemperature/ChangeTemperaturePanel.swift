@@ -31,13 +31,15 @@ struct ChangeTemperaturePanel: View {
       GradientSlider(
         value: $viewModel.temperatureCelsius,
         range: viewModel.signalingRange,
-        interiorLabel: Image(systemName: viewModel.thumbControlSymbol),
+        interiorLabel: { 
+          Image(systemName: viewModel.thumbControlSymbol)
+        },
         onEditingEnded: viewModel.writeCurrentTemperature
       )
       .frame(width: 150, alignment: .topLeading)
       .controlSize(.small)
       .animation(.smooth) {
-        $0.backgroundStyle(LinearGradient(colors: trackColors, startPoint: .leading, endPoint: .trailing))
+        $0.tint(LinearGradient(colors: trackColors, startPoint: .leading, endPoint: .trailing))
       }
       .padding(.bottom, 5)
 

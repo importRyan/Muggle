@@ -12,6 +12,11 @@ extension EmberMug: BluetoothPeripheral {
       setupStepsRemaining.remove(.serialNumber)
     }
 
+    if let knownLED = known?.mug.led {
+      self.color.value = knownLED
+      // Always fetch on connection because Ember's app could change this while Muggle isn't running.
+    }
+
     Log.ember.info("\(self.debugShortIdentifier) configured \(Self.self) serial: \(known?.mug.serial ?? "unknown") local: \(self.peripheral.identifier)")
   }
 

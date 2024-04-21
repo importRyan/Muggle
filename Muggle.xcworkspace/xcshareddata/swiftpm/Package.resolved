@@ -1,5 +1,5 @@
 {
-  "originHash" : "44208d6b2c715dd2f33379adabc48b289652306182c4393bb98ef9b2b6337288",
+  "originHash" : "f9dcca9f7b051bd33e2b199a47d9ed4c959833e386cef44fdb1257192f63f445",
   "pins" : [
     {
       "identity" : "ios-corebluetooth-mock",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "500b23852e7d46b63ef8e2a826c2b6f3f6ed50ef",
         "version" : "0.18.0"
+      }
+    },
+    {
+      "identity" : "oklab",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/importRyan/Oklab",
+      "state" : {
+        "revision" : "92b73e1ab5c0049c68326315f03320d77fe2df1a",
+        "version" : "1.1.2"
       }
     },
     {

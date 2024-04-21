@@ -223,12 +223,12 @@ private extension EmberMug {
   func updateIdentityIfNeeded(_ updatedCharacteristic: EmberGATT.Characteristics) {
     guard [.serialNumber, .led].contains(updatedCharacteristic),
           let serial = serial.value,
-          let color = led?.color
+          let led
     else { return }
     let identity = LocalKnownBluetoothMug(
       localCBUUID: peripheral.identifier,
       mug: KnownBluetoothMug(
-        color: color,
+        led: led,
         model: model,
         name: name,
         serial: serial

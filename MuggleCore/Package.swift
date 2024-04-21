@@ -14,7 +14,8 @@ let package = Package(
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-collections", from: Version(1, 1, 0)),
-    .package(url: "https://github.com/NordicSemiconductor/IOS-CoreBluetooth-Mock/", from: Version(0, 18, 0))
+    .package(url: "https://github.com/NordicSemiconductor/IOS-CoreBluetooth-Mock/", from: Version(0, 18, 0)),
+    .package(url: "https://github.com/importRyan/Oklab", from: Version(1, 1, 2)),
   ],
   targets: [
     .target(
@@ -27,6 +28,7 @@ let package = Package(
       name: "CommonUI",
       dependencies: [
         "Common",
+        .product(name: "Oklab", package: "Oklab"),
       ]
     ),
     .target(
