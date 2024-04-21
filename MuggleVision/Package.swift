@@ -3,7 +3,8 @@ import PackageDescription
 
 let package = Package(
   name: "MuggleVision",
-  platforms: [.visionOS(.v1)],
+  defaultLocalization: "en",
+  platforms: [.macOS(.v14), .visionOS(.v1)],
   products: [
     .library(name: "MuggleVision", targets: ["MuggleVision"]),
   ],
