@@ -4,10 +4,10 @@ import SwiftUI
 /// Apply track gradient using `.backgroundStyle`
 public struct GradientSlider<Label: View>: View {
 
-  public init(value: Binding<Double>, range: ClosedRange<Double>, interiorLabel: Label, onEditingEnded: @escaping () -> Void) {
+  public init(value: Binding<Double>, range: ClosedRange<Double>, interiorLabel: @escaping () -> Label, onEditingEnded: @escaping () -> Void) {
     self.value = value
     self.range = range
-    self.interiorLabel = interiorLabel
+    self.interiorLabel = interiorLabel()
     self.onEditingEnded = onEditingEnded
   }
 
@@ -44,15 +44,34 @@ private struct Component<Label: View>: View {
   @FocusState private var isFocused
   @State private var isHovered = false
   @GestureState private var isInteracting = false
+  @Environment(\.backgroundStyle) private var backgroundStyle
+
+  private var trackBackground: AnyShapeStyle {
+    if let backgroundStyle { backgroundStyle } else { AnyShapeStyle(.fill) }
+  }
 
   var body: some View {
     GeometryReader { geo in
       ZStack {
-        Track()
-
         let trackWidth = geo.size.width
-        let x: CGFloat = range.percentage(value) * trackWidth
+        let x: CGFloat = max(0, range.percentage(value) * trackWidth)
         let xRange = trackInset...(trackWidth - trackInset)
+
+        // Inactive track
+        Capsule()
+          .fill(trackBackground)
+          .clipShape(Capsule().inset(by: 0.01))
+
+        // Active track
+        Capsule()
+          .fill(.tint)
+          .grayscale(isEnabled ? 0 : 1)
+          .mask(alignment: .leading) {
+            Rectangle()
+              .union(Circle().offset(x: x / 2))
+              .frame(width: x)
+          }
+
         Thumb(
           isInteracting: isInteracting,
           isTrackHovered: isHovered,
@@ -156,7 +175,7 @@ private struct Thumb<Label: View>: View {
 
   var body: some View {
     ZStack {
-      Circle().opacity(0.93)
+      Circle().opacity(0.97)
       Circle().strokeBorder(lineWidth: 1)
       label
         .foregroundStyle(.black.opacity(0.8))
@@ -172,15 +191,5 @@ private struct Thumb<Label: View>: View {
         .scaleEffect(scaleEffect)
     }
     .onHover { isHovered = $0 }
-  }
-}
-
-private struct Track: View {
-  @Environment(\.isEnabled) var isEnabled
-
-  var body: some View {
-    Capsule()
-      .fill(.background)
-      .grayscale(isEnabled ? 0 : 1)
   }
 }
