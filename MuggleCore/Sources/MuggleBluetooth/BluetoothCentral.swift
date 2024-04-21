@@ -2,10 +2,9 @@ import Common
 import Combine
 import EmberBluetooth
 import Foundation
-import OrderedCollections
 
 public final class BluetoothCentral: NSObject, ObservableObject {
-  @Published public var peripherals: OrderedDictionary<UUID, BluetoothMug & BluetoothPeripheral> = [:]
+  @Published public var peripherals: Dictionary<UUID, BluetoothMug & BluetoothPeripheral> = [:]
   @Published public var status = CBManagerState.unknown
   @Published public var isScanning = false
   private var central: CBCentralManager?

@@ -22,6 +22,13 @@ struct MenuBarWindow: View {
   @ObservedObject var central: BluetoothCentral
   @Environment(\.isPresented) var isPresented
 
+  // TODO: - Better support multiple mugs
+  private var sortedDevices: [BluetoothMug & BluetoothPeripheral] {
+    central.peripherals.values.sorted(by: {
+      $0.name < $1.name
+    })
+  }
+
   var body: some View {
     VStack(spacing: 0) {
       BluetoothCentralStatusHint(
@@ -29,7 +36,7 @@ struct MenuBarWindow: View {
         noPeripherals: central.peripherals.isEmpty
       )
       if [.poweredOn, .resetting, .poweredOff].contains(central.status) {
-        ForEach(central.peripherals.elements, id: \.key) { _, mug in
+        ForEach(sortedDevices, id: \.peripheral.identifier) { mug in
           BluetoothMugView(
             mug: mug,
             viewModel: .init(mug: mug)
@@ -38,6 +45,7 @@ struct MenuBarWindow: View {
       }
       MenuBarWindowOptionsFooter()
     }
+    .fixedSize(horizontal: true, vertical: true)
     .onChange(of: isPresented, initial: true) { _, _ in
       central.scanForEmberProducts()
       central.scheduleScanStop(after: 60)

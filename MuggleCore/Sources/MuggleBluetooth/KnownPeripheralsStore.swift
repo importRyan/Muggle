@@ -1,6 +1,5 @@
 import Common
 import Foundation
-import OrderedCollections
 import SwiftUI
 
 public struct KnownPeripheralsStore {

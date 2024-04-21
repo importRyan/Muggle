@@ -12,10 +12,11 @@ struct BluetoothMugView: View {
   var body: some View {
     HStack(alignment: .center, spacing: 20) {
       deviceInfo
+        .frame(maxWidth: .infinity, alignment: .leading)
       changeTemperaturePanel
+        .fixedSize()
     }
     .padding(20)
-    .fixedSize()
     .contentShape(.rect)
     .contextMenu {
       TemperatureUnitPicker(viewModel: .init(mug: mug))
