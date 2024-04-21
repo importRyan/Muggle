@@ -49,6 +49,7 @@ struct BluetoothMugView: View {
         .padding(.bottom, 15)
 
       DeviceLabelView(mug: mug)
+        .disabled(viewModel.isDisabled)
     }
   }
 
