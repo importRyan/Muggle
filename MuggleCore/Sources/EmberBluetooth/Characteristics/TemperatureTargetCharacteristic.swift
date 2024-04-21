@@ -4,6 +4,7 @@ import Foundation
 final class TargetTemperatureCharacteristic {
   @Published var value: HeaterState?
   var characteristic: CBCharacteristic?
+  /// Mug 2 CM17, Tumbler 16 oz CM21X
   static let validTemperatureRange = 49.0...63.0
 }
 

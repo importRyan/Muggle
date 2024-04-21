@@ -6,7 +6,8 @@ Muggle is a macOS menu bar app for Bluetooth smart mugs. Unlike OEM apps, your i
 
 
 ### Supported Mugs
-- Ember Mug 2
+- Ember Mug 2 14 oz
+- Ember Tumbler 16 oz
 
 Other Ember products may work. Before changing the target temperature, check with Ember's app that your maximum temperature is 63C/145F. You can use Ember's app at the same time as Muggle.
 
