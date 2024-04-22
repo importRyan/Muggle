@@ -43,12 +43,20 @@ let package = Package(
       dependencies: [
         "Common",
         "EmberBluetooth",
+        "VFZOBluetooth",
         .product(name: "Collections", package: "swift-collections"),
       ]
     ),
     .testTarget(
       name: "MuggleBluetoothTests",
       dependencies: ["MuggleBluetooth"]
+    ),
+    .target(
+      name: "VFZOBluetooth",
+      dependencies: [
+        "Common",
+        .product(name: "Collections", package: "swift-collections"),
+      ]
     ),
   ]
 )

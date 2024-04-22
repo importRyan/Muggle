@@ -2,6 +2,7 @@ import Common
 import Combine
 import EmberBluetooth
 import Foundation
+import VFZOBluetooth
 
 public final class BluetoothCentral: NSObject, ObservableObject {
   @Published public var peripherals: Dictionary<UUID, BluetoothMug & BluetoothPeripheral> = [:]
@@ -12,6 +13,8 @@ public final class BluetoothCentral: NSObject, ObservableObject {
   private var stopScanTimer: AnyCancellable?
   private var stopScanTimerExpiration: Date?
   private let known: KnownPeripheralsStore
+
+  private var debugVFZOs: Dictionary<UUID, BluetoothMug & BluetoothPeripheral> = [:]
 
   public init(knownPeripheralsStore: KnownPeripheralsStore) {
     self.known = knownPeripheralsStore
@@ -102,6 +105,7 @@ extension BluetoothCentral: CBCentralManagerDelegate {
       populatePastPeripherals()
       // TODO: - Travel Mug Support
       populateEmberMugsCurrentlyConnectedByOtherApps()
+      populateVFZOMugsCurrentlyConnectedByOtherApps()
       scanForEmberProducts()
       scheduleScanStop(after: 5 * 60)
     } else if status == .poweredOn {
@@ -116,6 +120,11 @@ extension BluetoothCentral: CBCentralManagerDelegate {
     didConnect peripheral: CBPeripheral
   ) {
     guard let mug = peripherals[peripheral.identifier] else {
+      if let mug = debugVFZOs[peripheral.identifier] {
+        Log.central.info("didConnect \(mug.debugAllIdentifiers) \(mug.name) \(peripheral.name ?? "")")
+        mug.connection = .connected
+        return
+      }
       Log.central.error("didConnect unregistered peripheral \(peripheral.identifier)")
       return
     }
@@ -231,6 +240,23 @@ private extension BluetoothCentral {
     }
   }
 
+  func populateVFZOMugsCurrentlyConnectedByOtherApps() {
+    guard let central else {
+      Log.central.error("\(#function) Central Not Instantiated")
+      return
+    }
+    let vfzoMugs = central.retrieveConnectedPeripherals(withServices: [.vfzo.service])
+    Log.central.info("\(#function) Found \(vfzoMugs.count) Currently Connected VFZO Products")
+    for mug in vfzoMugs where peripherals[mug.identifier] == nil {
+      do {
+        let registeredMug = try registerNew(mug, [.vfzo.service])
+        connect(registeredMug)
+      } catch {
+        Log.central.error("\(#function) Unsupported Product \(mug.name ?? "") \(mug.identifier)")
+      }
+    }
+  }
+
   func populatePastPeripherals() {
     guard let central else {
       Log.central.error("\(#function) \(Self.self) Not Setup")
@@ -278,6 +304,14 @@ private extension BluetoothCentral {
       return alreadyRegistered
     }
     guard let model = BluetoothMugModel.EmberModel(advertisedServices: advertisedServices) else {
+
+      // Temporarily keep VFZO out of UI.
+      if advertisedServices.contains(.vfzo.service) {
+        let mug = BluetoothMugModel.VFZOModel.twelveOunce.build(newPeripheral)
+        debugVFZOs[newPeripheral.identifier] = mug
+        return mug
+      }
+
       throw BluetoothCentralError.unsupportedDevice
     }
     let mug = model.build(newPeripheral)
@@ -300,6 +334,8 @@ private extension BluetoothMugModel {
   func build(_ peripheral: CBPeripheral) -> BluetoothMug & BluetoothPeripheral {
     switch self {
     case .ember(let model):
+      model.build(peripheral)
+    case .vfzo(let model):
       model.build(peripheral)
     }
   }
