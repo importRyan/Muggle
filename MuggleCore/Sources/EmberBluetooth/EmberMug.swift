@@ -44,7 +44,7 @@ final class EmberMug: NSObject {
           return
         }
         Log.ember.info("\(self.debugShortIdentifier) onConnection request discoverServices")
-        peripheral?.discoverServices(nil)
+        peripheral?.discoverServices([.ember.service])
       }
   }
 }
