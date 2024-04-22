@@ -2,6 +2,7 @@ import Common
 import Combine
 import EmberBluetooth
 import Foundation
+import VFZOBluetooth
 
 public final class BluetoothCentral: NSObject, ObservableObject {
   @Published public var peripherals: Dictionary<UUID, BluetoothMug & BluetoothPeripheral> = [:]
@@ -300,6 +301,8 @@ private extension BluetoothMugModel {
   func build(_ peripheral: CBPeripheral) -> BluetoothMug & BluetoothPeripheral {
     switch self {
     case .ember(let model):
+      model.build(peripheral)
+    case .vfzo(let model):
       model.build(peripheral)
     }
   }
