@@ -24,6 +24,7 @@ package enum EmberMugActivity: Int {
   case cooling = 4
   case heating = 5
   case holding = 6
+  case coolingNoTargetTemp = 7
 
   package var activity: MugActivity {
     switch self {
@@ -34,6 +35,7 @@ package enum EmberMugActivity: Int {
     case .heating: .heating
     case .holding: .holding
     case .unknown3: .standby
+    case .coolingNoTargetTemp: .cooling
     }
   }
 }
@@ -48,6 +50,7 @@ extension EmberMugActivity: CustomDebugStringConvertible {
     case .cooling: "Cooling"
     case .heating: "Heating"
     case .holding: "Holding"
+    case .coolingNoTargetTemp: "Cooling No Target Temp (Speculative)"
     }
   }
 }
