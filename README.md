@@ -21,7 +21,9 @@ Other Ember products may work. Before changing the target temperature, check wit
 V1.1
 - [ ] Bright/fix icon
 - [ ] macOS: Sort eager Settings button first responder highlighting if opened while scanning
-- [ ] Confirm Travel mug support (HasContentsCharacteristic)
+- [ ] Confirm behavior: Travel mug (HasContentsCharacteristic, Service)
+- [ ] Verify behavior: Tumbler (HasContentCharacteristic slow update, definition), detectable from 180A/Serial/advertising?
+- [ ] Verify behavior: Cup
 - [x] Forget a mug
 
 V1.2
