@@ -47,6 +47,7 @@ struct MenuBarWindow: View {
       MenuBarWindowOptionsFooter()
     }
     .fixedSize(horizontal: true, vertical: true)
+    .animation(.smooth.fast, value: sortedDevices.map(\.peripheral.identifier ))
     .onChange(of: isPresented, initial: true) { _, _ in
       central.scanForEmberProducts()
       central.scheduleScanStop(after: 60)
