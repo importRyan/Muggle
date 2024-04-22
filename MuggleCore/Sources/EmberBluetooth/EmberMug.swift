@@ -25,7 +25,7 @@ final class EmberMug: NSObject {
   let color = LEDColorCharacteristic()
   let tempTarget = TargetTemperatureCharacteristic()
   let tempUnit = TemperatureUnitPreferenceCharacteristic()
-  let writes = Writes()
+  let writes = WriteQueue<EmberGATT.Characteristics, BluetoothMugCommand>()
 
   init(_ peripheral: CBPeripheral, _ model: BluetoothMugModel.EmberModel) {
     self.hasContentsCharacteristic = model.hasContentsCharacteristic
@@ -178,43 +178,6 @@ extension EmberMug {
     case .push: push
     case .led: color
     case .serialNumber: serial
-    }
-  }
-
-  class Writes {
-    @Published private(set) var awaitingResponse = Set<EmberGATT.Characteristics>()
-    private var queue = OrderedDictionary<EmberGATT.Characteristics, BluetoothMugCommand>()
-    private let lock = NSLock()
-
-    func awaitResponse(_ characteristic: EmberGATT.Characteristics) {
-      lock.lock()
-      defer { lock.unlock() }
-      awaitingResponse.insert(characteristic)
-    }
-
-    func removeAwaitedResponse(_ characteristic: EmberGATT.Characteristics) {
-      lock.lock()
-      defer { lock.unlock() }
-      awaitingResponse.remove(characteristic)
-    }
-
-    func removeAllAwaitedResponses() {
-      lock.lock()
-      defer { lock.unlock() }
-      awaitingResponse.removeAll()
-    }
-
-    func addToQueue(_ characteristic: EmberGATT.Characteristics, _ command: BluetoothMugCommand) {
-      lock.lock()
-      defer { lock.unlock() }
-      queue[characteristic] = command
-    }
-
-    func popNextInQueue() -> (EmberGATT.Characteristics, BluetoothMugCommand)? {
-      lock.lock()
-      defer { lock.unlock() }
-      if queue.isEmpty { return nil }
-      return queue.removeFirst()
     }
   }
 }
