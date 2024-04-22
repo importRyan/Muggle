@@ -86,6 +86,12 @@ public extension BluetoothCentral {
         self?.stopScanTimerExpiration = nil
       }
   }
+
+  func forget(_ mug: BluetoothPeripheral) {
+    peripherals.removeValue(forKey: mug.peripheral.identifier)
+    central?.cancelPeripheralConnection(mug.peripheral)
+    known.forget(mug.peripheral.identifier)
+  }
 }
 
 extension BluetoothCentral: CBCentralManagerDelegate {
@@ -161,7 +167,7 @@ extension BluetoothCentral: CBCentralManagerDelegate {
   ) {
     let errorDescription = error?.localizedDescription ?? ""
     guard let mug = peripherals[peripheral.identifier] else {
-      Log.central.error("didDisconnectPeripheral unregistered peripheral \(peripheral.identifier) \(errorDescription)")
+      Log.central.info("didDisconnectPeripheral unregistered peripheral \(peripheral.identifier) \(errorDescription)")
       return
     }
     let lastConnectionState = mug.connection

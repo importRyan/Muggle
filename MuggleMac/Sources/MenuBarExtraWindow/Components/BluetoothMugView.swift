@@ -5,8 +5,9 @@ import SwiftUI
 
 struct BluetoothMugView: View {
 
-  @State var isHovering = false
   let mug: BluetoothMug
+  let forget: () -> Void
+  @State private var isHovering = false
   @State var viewModel: ViewModel
 
   var body: some View {
@@ -22,6 +23,8 @@ struct BluetoothMugView: View {
       TemperatureUnitPicker(viewModel: .init(mug: mug))
         .pickerStyle(.inline)
         .disabled(viewModel.isDisabled)
+
+      Button("Forget…", action: forget)
     }
     .onHover { isHovering = $0 }
   }

@@ -5,12 +5,15 @@ import SwiftUI
 public struct KnownPeripheralsStore {
   public var peripherals: () -> [UUID: LocalKnownBluetoothMug]
   public var updatePeripheral: (LocalKnownBluetoothMug) -> Void
+  public var forget: (LocalKnownBluetoothMug.ID) -> Void
 
   public init(
     peripherals: @escaping () -> [UUID : LocalKnownBluetoothMug],
-    updatePeripheral: @escaping (LocalKnownBluetoothMug) -> Void
+    updatePeripheral: @escaping (LocalKnownBluetoothMug) -> Void,
+    forget: @escaping (LocalKnownBluetoothMug.ID) -> Void
   ) {
     self.peripherals = peripherals
+    self.forget = forget
     self.updatePeripheral = updatePeripheral
   }
 }
@@ -22,6 +25,10 @@ public extension KnownPeripheralsStore {
       peripherals: { cache },
       updatePeripheral: { peripheral in
         cache[peripheral.id] = peripheral
+        store.knownPeripherals = cache
+      },
+      forget: { id in
+        cache.removeValue(forKey: id)
         store.knownPeripherals = cache
       }
     )

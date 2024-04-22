@@ -39,6 +39,7 @@ struct MenuBarWindow: View {
         ForEach(sortedDevices, id: \.peripheral.identifier) { mug in
           BluetoothMugView(
             mug: mug,
+            forget: { central.forget(mug) },
             viewModel: .init(mug: mug)
           )
         }

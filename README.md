@@ -22,7 +22,7 @@ V1.1
 - [ ] Bright/fix icon
 - [ ] macOS: Sort eager Settings button first responder highlighting if opened while scanning
 - [ ] Confirm Travel mug support (HasContentsCharacteristic)
-- [ ] Forget a mug
+- [x] Forget a mug
 
 V1.2
 - [x] Brightness and color characteristic editing
