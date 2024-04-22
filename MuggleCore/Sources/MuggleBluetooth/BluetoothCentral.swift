@@ -119,7 +119,7 @@ extension BluetoothCentral: CBCentralManagerDelegate {
       Log.central.error("didConnect unregistered peripheral \(peripheral.identifier)")
       return
     }
-    Log.central.info("didConnect \(mug.debugAllIdentifiers)")
+    Log.central.info("didConnect \(mug.debugAllIdentifiers) \(mug.name) \(peripheral.name ?? "")")
     peripherals[peripheral.identifier]?.connection = .connected
   }
 
@@ -221,7 +221,7 @@ private extension BluetoothCentral {
     }
     let emberMugs = central.retrieveConnectedPeripherals(withServices: [.ember.service])
     Log.central.info("\(#function) Found \(emberMugs.count) Currently Connected Ember Products")
-    for mug in emberMugs {
+    for mug in emberMugs where peripherals[mug.identifier] == nil {
       do {
         let registeredMug = try registerNew(mug, [.ember.service])
         connect(registeredMug)
