@@ -32,7 +32,8 @@ extension EmberMug: BluetoothPeripheral {
     setupStepsRemaining.isEmpty
   }
 
+  /// TODO: - Enable name feature with model defaults. Ember does not use this in its app and the shipped names do not match what a consumer would expect (e.g., Tumbler is "Ember Mug 2").
   var name: String {
-    peripheral.name ?? "Ember"
+    "Ember"
   }
 }
