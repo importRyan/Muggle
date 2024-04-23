@@ -6,42 +6,48 @@ Muggle is a macOS menu bar app for Bluetooth smart mugs. Unlike OEM apps, your i
 
 
 ### Supported Mugs
-- Ember Mug 2 14 oz
-- Ember Tumbler 16 oz
+- Ember Mug 2 14 oz (tested: CM19P)
+- Ember Tumbler 16 oz (tested: CM21XL)
+- Ember Cup 6 oz (tested: CM21S)
 
-Other Ember products may work. Before changing the target temperature, check with Ember's app that your maximum temperature is 63C/145F. You can use Ember's app at the same time as Muggle.
+Caution: Before setting the max target temperature, check with Ember's app that the maximum temperature is 63C/145F. You can use Ember's app at the same time as Muggle.
 
-### Repo
-- `MuggleMac` SwiftUI MenuBarExtra
-- `MuggleBluetooth` CBCentralManager
-- `EmberBluetooth` CBPeripheral and Nordic mocks for Ember products
-- `Common` general utilities and the `BluetoothMug` protocol to keep UI product agnostic
+### Quick repo overview
+
+Various brands of BLE mugs are abstracted behind a `BluetoothMug` and `BluetoothPeripheral` protocol to keep the view layer agnostic to specific models. Nordic's CoreBluetoothMock library enables stable unit testing on CI.
+
+| Package\Target               | Purpose                                                          |
+|------------------------------|------------------------------------------------------------------|
+| `MuggleMac`                  | SwiftUI MenuBarExtra                                             |
+| `MuggleCore\MuggleBluetooth` | CBCentralManager                                                 |
+| `MuggleCore\EmberBluetooth`  | Ember CBPeripheral(s) + Nordic mocks                             |
+| `MuggleCore\VFZOBluetooth`   | VFZO M1 CBPeripheral + Nordic mocks                              |
+| `MuggleCore\Common`          | BluetoothMug/Peripheral protocol + Nordic CoreBluetoothMock shim |
+| `MuggleCore\CommonUI`        | Cross-platform SwiftUI                                           |
+
 
 ## To-dos
+V1.0.2
+- [ ] Icon: brighten/de-cheese
+- [ ] Verify behavior: Travel mug (HasContentsCharacteristic, Service)
+- [x] Verify behavior: Tumbler
+- [x] Verify behavior: Cup
+- [ ] fix: When keyboard navigation enabled, the Settings button appears with a focus ring
+
 V1.1
-- [ ] Bright/fix icon
-- [ ] macOS: Sort eager Settings button first responder highlighting if opened while scanning
-- [ ] Confirm behavior: Travel mug (HasContentsCharacteristic, Service)
-- [ ] Verify behavior: Tumbler (HasContentCharacteristic slow update, definition), detectable from 180A/Serial/advertising?
-- [ ] Verify behavior: Cup
-- [x] Forget a mug
-
-V1.2
-- [x] Brightness and color characteristic editing
-- [x] Add color to cloud-syncing
-- [ ] Reduce scanning eagerness to save a little laptop battery
-
-V1.3
 - [ ] Experiment: predict cooldown time, battery life, charge time 
+- [ ] VFZO M1 mug support
+
+Features
 - [ ] Experiment: eliminate Ember's low volume overheating
 - [ ] Experiment: reduce Ember's' battery consumption during cooldown phase
-
-V1.4
+- [ ] More non-Ember products
 - [ ] visionOS: as central
 - [ ] macOS/visionOS: "remote" central
-
-V1.5
-- [ ] Non-Ember products
-
-V1.6
 - [ ] iPhone/iPad + Live Activity / Widget
+- [ ] Improve onboarding
+
+Tasks/Fixes
+- [ ] Scanner efficiency: Reduce eagerness to save a little laptop battery / turn on manually after initial session
+- [ ] Forget a mug: cache forgotten IDs to prevent mugs in discovery mode from automatically reconnecting if scanning
+- [ ] Multi-muggers: select mug for MenuBar or allow multiple in MenuBar
